@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:8000/analyze-email"
+url = "http://localhost:800/analyze-email"
 
 payload = {
     "subject": "Partnership inquiry",
