@@ -15,7 +15,8 @@ export const fetchEmails = async (category: EmailCategory = 'ALL'): Promise<Emai
     }
     
     const data = await response.json();
-    return data;
+    // Backend returns { emails: [...] }, so extract the emails array
+    return data.emails || [];
   } catch (error) {
     console.error('Error fetching emails:', error);
     throw error;

@@ -8,10 +8,7 @@ import {
   CheckCircle,
   ArrowRight,
   PlayCircle,
-  Brain,
-  Inbox,
 } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthProvider';
 import { LoginModal } from './LoginModal';
 import { Navbar } from './Navbar';
@@ -38,7 +35,7 @@ const FEATURES = [
 ];
 
 export const LandingPage: React.FC = () => {
-  const { login, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
 

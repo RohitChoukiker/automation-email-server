@@ -8,7 +8,32 @@ import { analyzeEmailAI } from "../services/aiService.js";
 const router = express.Router();
 
 /**
- * 📌 Get Gmail OAuth2 client – PER USER
+ * 📋 GET /api/emails → Get All Emails from DB
+ */
+router.get("/", protect, async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    let query = { userId: req.user._id };
+
+    // Filter by intent/category if provided
+    if (category && category !== 'ALL') {
+      query.intent = category;
+    }
+
+    const emails = await Email.find(query)
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    res.json({ emails });
+  } catch (err) {
+    console.error("⚠ Get emails error:", err);
+    res.status(500).json({ message: "Failed to fetch emails" });
+  }
+});
+
+/**
+ * 📨 GET /api/emails/fetch → Gmail Inbox Se Latest Emails
  */
 function getOAuth2ClientForUser(user) {
   if (!user.googleRefreshToken) {
