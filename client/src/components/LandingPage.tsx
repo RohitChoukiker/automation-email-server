@@ -8,7 +8,10 @@ import {
   CheckCircle,
   ArrowRight,
   PlayCircle,
+  Brain,
+  Inbox,
 } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthProvider';
 import { LoginModal } from './LoginModal';
 import { Navbar } from './Navbar';
@@ -35,7 +38,7 @@ const FEATURES = [
 ];
 
 export const LandingPage: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
 
@@ -107,14 +110,29 @@ export const LandingPage: React.FC = () => {
               that actually moves the needle.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
-              <button
-                onClick={handleGetStarted}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-400 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/40 transition hover:from-blue-400 hover:to-sky-300"
-              >
-                {isAuthenticated ? 'Go to Dashboard' : 'Get started free'}
-                <ArrowRight className="h-4 w-4" />
-              </button>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              {isAuthenticated ? (
+                <button
+                  onClick={handleGetStarted}
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-400 px-7 py-3 text-sm font-semibold text-white shadow-xl shadow-blue-500/30 transition hover:-translate-y-0.5 hover:shadow-blue-500/40 sm:w-auto"
+                >
+                  Open Dashboard
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              ) : (
+                <div className="w-full sm:w-auto">
+                  <GoogleLogin
+                    onSuccess={login}
+                    onError={() => {
+                      console.log('Login Failed');
+                    }}
+                    theme="filled_blue"
+                    shape="pill"
+                    size="large"
+                    text="continue_with"
+                  />
+                </div>
+              )}
 
               <button
                 onClick={handleViewDemo}
@@ -152,7 +170,7 @@ export const LandingPage: React.FC = () => {
               <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                   <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-500 to-sky-400">
-                    <Mail className="h-5 w-5 text-white" />
+                    <Inbox className="h-4 w-4 text-white" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-gray-900">
@@ -185,21 +203,50 @@ export const LandingPage: React.FC = () => {
               </div>
 
               <div className="space-y-2.5 text-xs">
-                {[
-                  { title: 'Payment overdue for Invoice #1042', category: 'Payment', color: 'amber' },
-                  { title: 'Can you help me understand this report?', category: 'AI Answer', color: 'fuchsia' },
-                  { title: 'Project sync tomorrow at 4:30 PM', category: 'Meeting', color: 'emerald' },
-                ].map((item, idx) => (
-                  <div key={idx} className="group flex items-start justify-between gap-2 rounded-xl bg-gray-50 p-2.5 transition hover:bg-gray-100 hover:shadow">
-                    <div>
-                      <p className="font-semibold text-gray-900">{item.title}</p>
-                      <p className="line-clamp-1 text-gray-500">Sample email content...</p>
-                    </div>
-                    <span className={`rounded-full bg-${item.color}-50 px-2 py-1 text-${item.color}-700 ring-1 ring-${item.color}-200`}>
-                      {item.category}
-                    </span>
+                <div className="group flex items-start justify-between gap-2 rounded-xl bg-gray-50 p-2.5 transition hover:bg-gray-100 hover:shadow">
+                  <div>
+                    <p className="font-semibold text-gray-900">
+                      Payment overdue for Invoice #1042
+                    </p>
+                    <p className="line-clamp-1 text-gray-500">
+                      Finance · Your payment for October is pending. Please
+                      complete within 24 hours to avoid service interruption...
+                    </p>
                   </div>
-                ))}
+                  <span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700 ring-1 ring-amber-200">
+                    💵 Payment
+                  </span>
+                </div>
+
+                <div className="group flex items-start justify-between gap-2 rounded-xl bg-gray-50 p-2.5 transition hover:bg-gray-100 hover:shadow">
+                  <div>
+                    <p className="font-semibold text-gray-900">
+                      Can you help me understand this report?
+                    </p>
+                    <p className="line-clamp-1 text-gray-500">
+                      Client · I&apos;m a bit confused about the last section in the
+                      metrics dashboard. Could you walk me through...
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-fuchsia-50 px-2 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
+                    🧠 AI Answer
+                  </span>
+                </div>
+
+                <div className="group flex items-start justify-between gap-2 rounded-xl bg-gray-50 p-2.5 transition hover:bg-gray-100 hover:shadow">
+                  <div>
+                    <p className="font-semibold text-gray-900">
+                      Project sync tomorrow at 4:30 PM
+                    </p>
+                    <p className="line-clamp-1 text-gray-500">
+                      Calendar · You&apos;re invited to &quot;Q4 Planning Sync&quot;
+                      with the product team. Agenda: roadmap, ownership, timelines...
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700 ring-1 ring-emerald-200">
+                    📅 Meeting
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -245,6 +292,244 @@ export const LandingPage: React.FC = () => {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Section */}
+      <section
+        className="border-t border-gray-200 bg-white py-16 transition-colors duration-300"
+        id="demo"
+      >
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">
+              Live preview
+            </p>
+            <h2 className="text-3xl font-semibold text-gray-900">
+              See exactly how EmailFlow organizes your day
+            </h2>
+            <p className="mt-3 text-sm text-gray-600 sm:text-base">
+              Incoming emails are automatically categorized into Urgent, Meeting,
+              Order, Payment and AI Answer. You get a clean, prioritized inbox
+              without changing the way you work.
+            </p>
+            <ul className="mt-5 space-y-3 text-sm text-gray-700">
+              <li className="flex gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                <span>
+                  🔥 Urgent threads are highlighted at the top so you never miss
+                  critical messages.
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                <span>
+                  📅 Meeting invites and reminders are grouped and ready to sync
+                  with your calendar.
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                <span>
+                  🧠 AI Answer category catches questions that your AI assistant can
+                  respond to instantly.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Fake inbox preview card (reuse style but simpler) */}
+          <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-2xl shadow-gray-200/70 backdrop-blur">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600/90">
+                  <Inbox className="h-4 w-4 text-white" />
+                </div>
+                <span className="text-sm font-semibold text-gray-900">
+                  Smart Inbox View
+                </span>
+              </div>
+              <span className="text-[11px] text-gray-500">Today · 12 new</span>
+            </div>
+
+            <div className="mb-4 flex flex-wrap gap-2 text-[11px]">
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-blue-700 ring-1 ring-blue-200">
+                🔥 Urgent
+              </span>
+              <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 ring-1 ring-emerald-200">
+                📅 Meeting
+              </span>
+              <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-700 ring-1 ring-amber-200">
+                💵 Payment
+              </span>
+              <span className="rounded-full bg-fuchsia-50 px-3 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
+                🧠 AI Answer
+              </span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="flex items-start justify-between gap-2 rounded-lg bg-gray-50 p-2.5">
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Payment overdue for Invoice #1042
+                  </p>
+                  <p className="line-clamp-1 text-gray-500">
+                    Finance · Your payment for October is pending. Please complete
+                    within 24 hours...
+                  </p>
+                </div>
+                <span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700 ring-1 ring-amber-200">
+                  💵 Payment
+                </span>
+              </div>
+
+              <div className="flex items-start justify-between gap-2 rounded-lg bg-gray-50 p-2.5">
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Can you help me understand this report?
+                  </p>
+                  <p className="line-clamp-1 text-gray-500">
+                    Client · I&apos;m a bit confused about the last section in the
+                    metrics dashboard...
+                  </p>
+                </div>
+                <span className="rounded-full bg-fuchsia-50 px-2 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
+                  🧠 AI Answer
+                </span>
+              </div>
+
+              <div className="flex items-start justify-between gap-2 rounded-lg bg-gray-50 p-2.5">
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Project sync tomorrow at 4:30 PM
+                  </p>
+                  <p className="line-clamp-1 text-gray-500">
+                    Calendar · You&apos;re invited to &quot;Q4 Planning Sync&quot;
+                    with the product team...
+                  </p>
+                </div>
+                <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700 ring-1 ring-emerald-200">
+                  📅 Meeting
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section
+        className="border-t border-gray-200 bg-gray-50 py-16 transition-colors duration-300"
+        id="how-it-works"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold text-gray-900">
+              How EmailFlow works
+            </h2>
+            <p className="mt-3 text-sm text-gray-600 sm:text-base">
+              Plug in your Gmail once. From that moment, every incoming email gets
+              processed by our AI pipeline – within milliseconds.
+            </p>
+          </div>
+
+          <div className="grid gap-6 text-sm md:grid-cols-3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-blue-600">
+                Step 1
+              </p>
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">
+                Connect your Gmail
+              </h3>
+              <p className="text-gray-600">
+                Securely authenticate with Google OAuth. We only request the scopes
+                required to read and label your emails.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-blue-600">
+                Step 2
+              </p>
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">
+                AI categorizes in real time
+              </h3>
+              <p className="text-gray-600">
+                Our models scan subject, content and metadata to assign the best
+                category and priority score to every message.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-blue-600">
+                Step 3
+              </p>
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">
+                You work from a clean inbox
+              </h3>
+              <p className="text-gray-600">
+                View everything inside your EmailFlow dashboard or keep using
+                Gmail — your labels and filters stay perfectly in sync.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ / Security */}
+      <section
+        className="border-t border-gray-200 bg-white py-16 transition-colors duration-300"
+        id="faq"
+      >
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:px-8">
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Built with security in mind
+            </h2>
+            <p className="mt-3 text-sm text-gray-600 sm:text-base">
+              We never store your Google password and only use OAuth to access your
+              inbox. Data is transmitted over HTTPS and stored using
+              industry-standard encryption.
+            </p>
+            <div className="mt-5 flex items-start gap-3 text-sm text-gray-700">
+              <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600/90">
+                <Brain className="h-4 w-4 text-white" />
+              </div>
+              <span>
+                AI runs on your configured provider — you stay in control of your
+                prompts, data, and costs.
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-sm text-gray-700">
+            <div>
+              <p className="mb-1 text-sm font-semibold text-gray-900">
+                Do I have to change my email client?
+              </p>
+              <p>
+                No. EmailFlow works on top of Gmail. You can keep using your
+                existing apps while we handle categorization and automation in the
+                background.
+              </p>
+            </div>
+            <div>
+              <p className="mb-1 text-sm font-semibold text-gray-900">
+                Can I turn off automation at any time?
+              </p>
+              <p>
+                Yes. You can pause EmailFlow or disconnect your account in a single
+                click from the dashboard.
+              </p>
+            </div>
+            <div>
+              <p className="mb-1 text-sm font-semibold text-gray-900">
+                Is there a free plan?
+              </p>
+              <p>
+                We offer a 14-day free trial with all features unlocked so you can
+                see the value before upgrading.
+              </p>
+            </div>
           </div>
         </div>
       </section>
