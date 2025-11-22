@@ -94,7 +94,7 @@ export const LandingPage: React.FC = () => {
             </h1>
 
             <p className="mb-8 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-              EmailFlow sits on top of Gmail, automatically categorizing and
+              Inboxonic sits on top of Gmail, automatically categorizing and
               prioritizing every incoming email so you can focus on work that
               actually moves the needle.
             </p>
@@ -142,7 +142,7 @@ export const LandingPage: React.FC = () => {
               <span className="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block" />
               <div className="flex items-center gap-1.5">
                 <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
-                <span>14-day full-feature trial</span>
+                <span>2-day full-feature trial</span>
               </div>
               <span className="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block" />
               <div className="flex items-center gap-1.5">
@@ -210,7 +210,7 @@ export const LandingPage: React.FC = () => {
               Live preview
             </p>
             <h2 className="text-3xl font-semibold text-slate-900">
-              See exactly how EmailFlow organizes your day
+              See exactly how Inboxonic organizes your day
             </h2>
             <p className="mt-3 text-sm text-slate-600 sm:text-base">
               Incoming emails are automatically categorized into Urgent, Meeting,
@@ -221,21 +221,21 @@ export const LandingPage: React.FC = () => {
               <li className="flex gap-3">
                 <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                 <span>
-                  🔥 Urgent threads are highlighted at the top so you never miss
+                   Urgent threads are highlighted at the top so you never miss
                   critical messages.
                 </span>
               </li>
               <li className="flex gap-3">
                 <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                 <span>
-                  📅 Meeting invites and reminders are grouped and ready to sync
+                   Meeting invites and reminders are grouped and ready to sync
                   with your calendar.
                 </span>
               </li>
               <li className="flex gap-3">
                 <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                 <span>
-                  🧠 AI Answer category catches questions that your AI assistant can
+                   AI Answer category catches questions that your AI assistant can
                   respond to instantly.
                 </span>
               </li>
@@ -258,16 +258,16 @@ export const LandingPage: React.FC = () => {
 
             <div className="mb-4 flex flex-wrap gap-2 text-[11px]">
               <span className="rounded-full bg-sky-50 px-3 py-1 text-sky-700 ring-1 ring-sky-200">
-                🔥 Urgent
+                 Urgent
               </span>
               <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 ring-1 ring-emerald-200">
-                📅 Meeting
+                 Meeting
               </span>
               <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-700 ring-1 ring-amber-200">
-                💵 Payment
+                 Payment
               </span>
               <span className="rounded-full bg-fuchsia-50 px-3 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
-                🧠 AI Answer
+                 AI Answer
               </span>
             </div>
 
@@ -298,7 +298,7 @@ export const LandingPage: React.FC = () => {
                   </p>
                 </div>
                 <span className="rounded-full bg-fuchsia-50 px-2 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
-                  🧠 AI Answer
+                   AI Answer
                 </span>
               </div>
 
@@ -313,7 +313,7 @@ export const LandingPage: React.FC = () => {
                   </p>
                 </div>
                 <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700 ring-1 ring-emerald-200">
-                  📅 Meeting
+                  Meeting
                 </span>
               </div>
             </div>
@@ -329,7 +329,7 @@ export const LandingPage: React.FC = () => {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-12 max-w-3xl text-center">
             <h2 className="text-3xl font-semibold text-slate-900">
-              How EmailFlow works
+              How Inboxonic works
             </h2>
             <p className="mt-3 text-sm text-slate-600 sm:text-base">
               Plug in your Gmail once. From that moment, every incoming email gets
@@ -429,7 +429,7 @@ export const LandingPage: React.FC = () => {
                 Is there a free plan?
               </p>
               <p>
-                We offer a 14-day free trial with all features unlocked so you can
+                We offer a 2-day free trial with all features unlocked so you can
                 see the value before upgrading.
               </p>
             </div>
@@ -441,15 +441,13 @@ export const LandingPage: React.FC = () => {
       <footer className="border-t border-slate-200 bg-white/90 py-8 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 text-xs text-slate-500 sm:px-6 md:flex-row lg:px-8">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-tr from-sky-500 to-blue-500">
-              <Mail className="h-3.5 w-3.5 text-white" />
-            </div>
+             <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-10" />
             <span className="text-sm font-semibold text-slate-900">
-              EmailFlow
+              Inboxonic
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <span>© 2024 EmailFlow Inc. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} Inboxonic Inc. All rights reserved.</span>
             <span className="hidden h-1 w-1 rounded-full bg-slate-400 md:inline-block" />
             <button className="hover:text-slate-900">Privacy</button>
             <span className="hidden h-1 w-1 rounded-full bg-slate-400 md:inline-block" />
