@@ -1,3 +1,4 @@
+// routes/auth-routes.js
 import express from "express";
 import { google } from "googleapis";
 import User from "../models/user-model.js";
@@ -8,13 +9,18 @@ const router = express.Router();
 
 // STEP 1: return Google auth URL
 router.get("/google", (req, res) => {
-  const url = oauth2Client.generateAuthUrl({
-    access_type: "offline",
-    prompt: "consent",
-    scope: GOOGLE_SCOPES,
-  });
+  try {
+    const url = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      prompt: "consent",
+      scope: GOOGLE_SCOPES,
+    });
 
-  res.json({ authUrl: url });
+    res.json({ authUrl: url });
+  } catch (err) {
+    console.error("Google auth URL error:", err.message);
+    res.status(500).json({ message: "Failed to generate auth URL" });
+  }
 });
 
 // STEP 2: Google callback
@@ -26,6 +32,7 @@ router.get("/google/callback", async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
+    // user info nikaalna
     const oauth2 = google.oauth2({ auth: oauth2Client, version: "v2" });
     const { data: profile } = await oauth2.userinfo.get();
 
@@ -51,6 +58,7 @@ router.get("/google/callback", async (req, res) => {
     } else {
       user.googleAccessToken = tokens.access_token || user.googleAccessToken;
       if (tokens.refresh_token) {
+        // kabhi kabhi refresh_token sirf first time aata hai
         user.googleRefreshToken = tokens.refresh_token;
       }
       if (tokens.expiry_date) {
@@ -75,7 +83,7 @@ router.get("/google/callback", async (req, res) => {
     // production me redirect bhi kar sakte:
     // res.redirect(`http://localhost:3000/oauth/callback?token=${jwtToken}`);
   } catch (err) {
-    console.error("Google callback error:", err);
+    console.error("Google callback error:", err.response?.data || err.message);
     res.status(500).send("Auth error");
   }
 });
