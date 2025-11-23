@@ -1,58 +1,70 @@
 import React from "react";
-import { Mail, ArrowRight, Sun, Moon } from "lucide-react";
-import { useAuth } from "../context/AuthProvider";
-import { useTheme } from "../context/ThemeContext";
+import { Mail } from "lucide-react";
 
-interface NavbarProps {
-  onLoginClick: () => void;
-  onGetStartedClick: () => void;
+type NavbarProps = {
+  isAuthenticated: boolean;
+  onGetStarted: () => void;
   scrollToSection: (id: string) => void;
-}
+};
 
 export const Navbar: React.FC<NavbarProps> = ({
-  onLoginClick,
-  onGetStartedClick,
+  isAuthenticated,
+  onGetStarted,
   scrollToSection,
 }) => {
-  const { isAuthenticated } = useAuth();
- 
-
   return (
-    <nav className="sticky top-0 z-30 border-b border-gray-200 bg-white/80 backdrop-blur-xl transition-colors duration-300">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
+    <header className="sticky top-0 z-20 border-b border-lime-100 bg-[#E8FFC6]">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
-          <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-10" />
-     
-          <div className="flex flex-col leading-tight">
-            <span className="text-lg font-semibold tracking-tight text-gray-900">
-              Inboxonic{" "}
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.18em] text-gray-500">
-              AI Inbox OS
-            </span>
-          </div>
+          <img src="/elogo.png" alt="Inboxonic Logo" className="h-16 w-16" />
+
+          <span className="text-lg font-semibold tracking-tight">
+            Inboxonic
+          </span>
         </div>
 
-      
+        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-800 sm:flex">
+          <button
+            onClick={() => scrollToSection("hero")}
+            className="hover:text-slate-950"
+          >
+            Home
+          </button>
+          <button
+            onClick={() => scrollToSection("features")}
+            className="hover:text-slate-950"
+          >
+            Features
+          </button>
+          <button
+            onClick={() => scrollToSection("why-us")}
+            className="hover:text-slate-950"
+          >
+            Why us
+          </button>
+          <button
+            onClick={() => scrollToSection("faq")}
+            className="hover:text-slate-950"
+          >
+            FAQ
+          </button>
+        </nav>
 
-        {/* Right actions */}
-        <div className="flex items-center gap-3">
-         
-
-          {/* Login button */}
-          {!isAuthenticated && (
-            <button
-              onClick={onLoginClick}
-              className="hidden items-center rounded-full border border-gray-200 px-6 py-1.5 text-xs font-medium text-gray-700 transition hover:border-gray-300 hover:bg-gray-50 sm:flex"
-            >
-            
-              Login
-            </button>
-          )}
-
+        <div className="flex items-center gap-4">
+          <div className="hidden text-xs font-medium text-slate-800 sm:block">
+            <span className="font-semibold">Quick access:</span> Sign in with
+            Google
+          </div>
+          <button
+            onClick={onGetStarted}
+            className="rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
+          >
+            {isAuthenticated ? "Open Dashboard" : "Get Started"}
+          </button>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
+
+export default Navbar;
