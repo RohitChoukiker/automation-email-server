@@ -7,7 +7,7 @@ import { generateToken } from "../utils/generateToken.js";
 
 const router = express.Router();
 
-// STEP 1: return Google auth URL
+
 router.get("/google", (req, res) => {
   try {
     const url = oauth2Client.generateAuthUrl({
@@ -23,7 +23,7 @@ router.get("/google", (req, res) => {
   }
 });
 
-// STEP 2: Google callback
+
 router.get("/google/callback", async (req, res) => {
   try {
     const code = req.query.code;
@@ -32,7 +32,7 @@ router.get("/google/callback", async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // user info nikaalna
+
     const oauth2 = google.oauth2({ auth: oauth2Client, version: "v2" });
     const { data: profile } = await oauth2.userinfo.get();
 
@@ -58,7 +58,7 @@ router.get("/google/callback", async (req, res) => {
     } else {
       user.googleAccessToken = tokens.access_token || user.googleAccessToken;
       if (tokens.refresh_token) {
-        // kabhi kabhi refresh_token sirf first time aata hai
+       
         user.googleRefreshToken = tokens.refresh_token;
       }
       if (tokens.expiry_date) {
@@ -69,7 +69,7 @@ router.get("/google/callback", async (req, res) => {
 
     const jwtToken = generateToken(user._id);
 
-    // dev ke liye direct JSON
+  
     return res.json({
       token: jwtToken,
       user: {
