@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail } from 'lucide-react';
+
 import { CategoryFilter } from './CategoryFilter';
 import { EmailList } from './EmailList';
 import type { EmailCategory } from '../types';
@@ -8,36 +8,68 @@ import { useTheme } from '../context/ThemeContext';
 import DashboardHeader from './DashboardHeader';
 
 const Dashboard: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<EmailCategory>('ALL');
+  const [selectedCategory, setSelectedCategory] =
+    useState<EmailCategory>('ALL');
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 transition-colors duration-300">
-      {/* Animated Background Blobs */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 opacity-20 blur-3xl animate-float"></div>
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 opacity-20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-[#E9F5FF] text-slate-900 transition-colors duration-300">
+      {/* Soft background blobs */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 -right-24 h-80 w-80 rounded-full bg-[#E8FFC6] opacity-70 blur-3xl" />
+        <div className="absolute -bottom-40 -left-24 h-80 w-80 rounded-full bg-[#D0F1FF] opacity-70 blur-3xl" />
       </div>
 
-      <DashboardHeader user={user} theme={theme} onToggleTheme={toggleTheme} onLogout={logout} />
+      <DashboardHeader
+        user={user}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onLogout={logout}
+      />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-4xl font-display font-bold mb-2 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">Your Inbox</h2>
-          <p className="text-gray-600 text-lg">Manage and categorize your incoming emails efficiently.</p>
+        <div
+          className="mb-8 animate-slide-up"
+          style={{ animationDelay: '0.15s' }}
+        >
+          <h2 className="mb-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+            Your Inbox
+          </h2>
+          <p className="text-sm text-slate-600 sm:text-base">
+            Manage and categorize your incoming emails efficiently with
+            Inboxonic’s intelligent automation.
+          </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
-          <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+        {/* Main card */}
+        <div className="rounded-[32px] border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm sm:p-6 lg:p-7">
+          {/* Category Filter */}
+          <div
+            className="mb-5 border-b border-slate-100 pb-4 animate-slide-up"
+            style={{ animationDelay: '0.25s' }}
+          >
+            <CategoryFilter
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          </div>
+
+          {/* Email List */}
+          <div
+            className="animate-slide-up"
+            style={{ animationDelay: '0.35s' }}
+          >
+            <EmailList category={selectedCategory} />
+          </div>
         </div>
 
-        {/* Email List */}
-        <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
-          <EmailList category={selectedCategory} />
+        {/* Small hint / footer text */}
+        <div className="mt-4 text-xs text-slate-500">
+          Inboxonic reads and labels your emails using secure OAuth scopes – you
+          stay in full control of your Gmail account.
         </div>
       </main>
     </div>

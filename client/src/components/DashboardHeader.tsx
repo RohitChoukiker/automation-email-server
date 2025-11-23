@@ -26,7 +26,7 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
     return () => window.removeEventListener('keydown', onKey);
   }, [mobileOpen]);
 
-  // Close profile popover on outside click or Escape
+  
   React.useEffect(() => {
     if (!showProfile) return;
     const onKey = (e: KeyboardEvent) => {
@@ -50,13 +50,13 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
 
   const handleNavClick = (path: string) => {
     setMobileOpen(false);
-    // navigate to landing page and include hash for section if provided
+   
     navigate(path);
   };
-
+  
   return (
     <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-2 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <button
