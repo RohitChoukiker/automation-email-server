@@ -93,7 +93,6 @@ export const LandingPage: React.FC = () => {
                 </button>
               ) : (
                 <div className="w-full sm:w-auto flex items-center gap-3">
-                 
                   <button
                     onClick={handleGetStarted}
                     className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
@@ -151,6 +150,182 @@ export const LandingPage: React.FC = () => {
                   Payments so you can breeze through tasks.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="border-t border-slate-200 bg-white py-20"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Heading + subheading */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              How Inboxonic works
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Plug in your Gmail once. From that moment, every incoming email
+              gets processed by our AI pipeline – within milliseconds.
+            </p>
+          </div>
+
+          {/* Step cards */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Step 1 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 1
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                Connect your Gmail
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Securely authenticate with Google OAuth. We only request the
+                scopes required to read and label your emails.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 2
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                AI categorizes in real time
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Our models scan subject, content and metadata to assign the best
+                category and priority score to every message.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 3
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                You work from a clean inbox
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                View everything inside your Inboxonic dashboard or keep using
+                Gmail — your labels and filters stay perfectly in sync.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            {/* Features Section */}
+      <section
+        id="features"
+        className="border-t border-slate-200 bg-[#F5FBFF] py-20"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Heading */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              Powerful features for your inbox
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Inboxonic makes email effortless — from smart categorization to AI
+              replies. Everything works automatically, on top of your existing
+              Gmail.
+            </p>
+          </div>
+
+          {/* Feature Grid */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Feature 1 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-sky-50 blur-2xl group-hover:bg-sky-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <Zap className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                Smart categorization
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Emails are automatically sorted into Urgent, Meeting, Order,
+                Payment and AI Answer — no manual labels ever again.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-50 blur-2xl group-hover:bg-emerald-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                Priority scoring
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                AI detects the importance of every email so that crucial
+                messages appear first.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-fuchsia-50 blur-2xl group-hover:bg-fuchsia-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <Mail className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                Auto-reply suggestions
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Get AI-generated responses you can send with one click — or
+                customize before sending.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-amber-50 blur-2xl group-hover:bg-amber-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                Analytics dashboard
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Track email trends, response time and category breakdowns — all
+                inside your dashboard.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-sky-50 blur-2xl group-hover:bg-sky-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <Mail className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                Works with Gmail
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Keep using Gmail — Inboxonic just adds AI logic on top with
+                labels &amp; syncing.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-50 blur-2xl group-hover:bg-emerald-100" />
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                <Shield className="h-5 w-5" />
+              </div>
+              <p className="text-lg font-semibold text-slate-900">
+                No extra apps needed
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Everything runs in browser. No downloads, no setup headaches.
+              </p>
             </div>
           </div>
         </div>
@@ -239,157 +414,7 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
-      {/* Features Section */}
-      <section
-        id="features"
-        className="border-t border-slate-200 bg-[#F5FBFF] py-20"
-      >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          {/* Heading */}
-          <div className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              Powerful features for your inbox
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-              Inboxonic makes email effortless — from smart categorization to AI
-              replies. Everything works automatically, on top of your existing
-              Gmail.
-            </p>
-          </div>
 
-          {/* Feature Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Feature 1 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                Smart categorization
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Emails are automatically sorted into Urgent, Meeting, Order,
-                Payment and AI Answer — no manual labels ever again.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                Priority scoring
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                AI detects the importance of every email so that crucial
-                messages appear first.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                Auto-reply suggestions
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Get AI-generated responses you can send with one click — or
-                customize before sending.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                Analytics dashboard
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Track email trends, response time and category breakdowns — all
-                inside your dashboard.
-              </p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                Works with Gmail
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Keep using Gmail — Inboxonic just adds AI logic on top with
-                labels & syncing.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-              <p className="text-lg font-semibold text-slate-900">
-                No extra apps needed
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Everything runs in browser. No downloads, no setup headaches.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section
-        id="how-it-works"
-        className="border-t border-slate-200 bg-white py-20"
-      >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          {/* Heading + subheading */}
-          <div className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              How Inboxonic works
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-              Plug in your Gmail once. From that moment, every incoming email
-              gets processed by our AI pipeline – within milliseconds.
-            </p>
-          </div>
-
-          {/* Step cards */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {/* Step 1 */}
-            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 1
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                Connect your Gmail
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                Securely authenticate with Google OAuth. We only request the
-                scopes required to read and label your emails.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 2
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                AI categorizes in real time
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                Our models scan subject, content and metadata to assign the best
-                category and priority score to every message.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 3
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                You work from a clean inbox
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                View everything inside your Inboxonic dashboard or keep using
-                Gmail — your labels and filters stay perfectly in sync.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Security / FAQ – reuse but match palette */}
       <section id="faq" className="border-t border-lime-100 bg-[#EAF6FF] py-16">

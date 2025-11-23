@@ -41,10 +41,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-12" />
-          <span className="text-lg font-semibold tracking-tight">
-            Inboxonic
-          </span>
+          <button
+            onClick={() => {
+              scrollToSection('hero');
+              setMobileOpen(false);
+            }}
+            aria-label="Go to home"
+            className="flex items-center gap-2 text-left"
+          >
+            <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-12" />
+            <span className="text-lg font-semibold tracking-tight">
+              Inboxonic
+            </span>
+          </button>
         </div>
 
         {/* Desktop nav */}
@@ -55,17 +64,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Home
           </button>
-          <button
-            onClick={() => scrollToSection("why-us")}
-            className="hover:text-slate-950"
-          >
-            Why us
-          </button>
+          
           <button
             onClick={() => scrollToSection("features")}
             className="hover:text-slate-950"
           >
             Features
+          </button>
+          <button
+            onClick={() => scrollToSection("why-us")}
+            className="hover:text-slate-950"
+          >
+            Why us
           </button>
           
           <button
