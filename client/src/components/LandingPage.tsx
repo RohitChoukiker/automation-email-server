@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Mail,
   Zap,
@@ -9,18 +9,18 @@ import {
   ArrowRight,
   PlayCircle,
   Brain,
-} from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
-import { useAuth } from '../context/AuthProvider';
-import { LoginModal } from './LoginModal';
-import { Navbar } from './Navbar';
+} from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
+import { useAuth } from "../context/AuthProvider";
+import { LoginModal } from "./LoginModal";
+import { Navbar } from "./Navbar";
 
 const BULLETS = [
-  'Neat and clean inbox – no chaos.',
-  'Wide coverage: personal + work Gmail.',
-  'Your privacy is always maintained.',
-  'Friendly, human-like AI replies.',
-  'Super easy setup – under 2 minutes.',
+  "Neat and clean inbox – no chaos.",
+  "Wide coverage: personal + work Gmail.",
+  "Your privacy is always maintained.",
+  "Friendly, human-like AI replies.",
+  "Super easy setup – under 2 minutes.",
 ];
 
 export const LandingPage: React.FC = () => {
@@ -30,26 +30,26 @@ export const LandingPage: React.FC = () => {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     } else {
       setIsLoginModalOpen(true);
     }
   };
 
-  const handlePlayDemo = () => scrollToSection('why-us');
+  const handlePlayDemo = () => scrollToSection("why-us");
 
   return (
     <div className="min-h-screen bg-[#EAF6FF] text-slate-900 antialiased">
@@ -60,31 +60,26 @@ export const LandingPage: React.FC = () => {
       />
 
       {/* Hero section */}
-      <section
-        id="hero"
-        className="bg-[#EAF6FF] pb-16 pt-12 sm:pt-16 lg:pt-20"
-      >
+      <section id="hero" className="bg-[#EAF6FF] pb-16 pt-12 sm:pt-16 lg:pt-20">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-16 lg:px-8">
           {/* Left column */}
           <div className="max-w-xl">
-            
-
             <h1 className="mb-5 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem]">
-              Fast and reliable{' '}
+              Fast and reliable{" "}
               <span className="relative inline-block">
                 <span className="relative z-10">smart email</span>
                 <span
                   aria-hidden
                   className="absolute inset-x-[-4px] bottom-0 top-1 rounded-md bg-[#E8FFC6]"
                 />
-              </span>{' '}
-             automation
+              </span>{" "}
+              automation
             </h1>
 
             <p className="mb-7 text-base leading-relaxed text-slate-700 sm:text-lg">
-              Inboxonic sits on top of Gmail, instantly sorting, prioritizing, and
-              even replying to the emails that matter – so your digital workspace
-              always feels as clean as a freshly serviced office.
+              Inboxonic sits on top of Gmail, instantly sorting, prioritizing,
+              and even replying to the emails that matter – so your digital
+              workspace always feels as clean as a freshly serviced office.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
@@ -101,7 +96,7 @@ export const LandingPage: React.FC = () => {
                   <GoogleLogin
                     onSuccess={login}
                     onError={() => {
-                      console.log('Login Failed');
+                      console.log("Login Failed");
                     }}
                     theme="outline"
                     shape="pill"
@@ -144,9 +139,13 @@ export const LandingPage: React.FC = () => {
           <div className="relative flex w-full justify-center lg:justify-end">
             <div className="relative h-[320px] w-[320px] overflow-hidden rounded-[46%] bg-[#FDFDFD] shadow-xl shadow-slate-900/5 sm:h-[360px] sm:w-[360px]">
               <div className="absolute -left-10 -top-10 h-40 w-40 rounded-3xl bg-[#E8FFC6]" />
-             
+
               <div className="relative flex h-full flex-col items-center justify-center gap-4 px-8">
-                <img src="/elogo.png" alt="Inboxonic Logo" className="h-16 w-16" />
+                <img
+                  src="/elogo.png"
+                  alt="Inboxonic Logo"
+                  className="h-16 w-16"
+                />
                 <p className="text-center text-sm font-semibold text-slate-900">
                   “My inbox feels freshly cleaned every morning.”
                 </p>
@@ -159,8 +158,6 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      
 
       {/* Why us section */}
       <section
@@ -177,9 +174,9 @@ export const LandingPage: React.FC = () => {
               We come as fast as lightning when a new email arrives.
             </h2>
             <p className="mb-6 text-sm leading-relaxed text-slate-700 sm:text-base">
-              As soon as a message lands in your inbox, Inboxonic&apos;s AI engine
-              analyzes content, intent and priority — then neatly places it where
-              it belongs. You just open a beautifully organized inbox.
+              As soon as a message lands in your inbox, Inboxonic&apos;s AI
+              engine analyzes content, intent and priority — then neatly places
+              it where it belongs. You just open a beautifully organized inbox.
             </p>
 
             <div className="grid gap-4 text-sm text-slate-800 sm:grid-cols-2">
@@ -208,8 +205,8 @@ export const LandingPage: React.FC = () => {
                       Instant categorization
                     </p>
                     <p className="text-xs text-slate-600">
-                      Every email is tagged as Urgent, Meeting, Order, Payment or
-                      AI Answer in seconds.
+                      Every email is tagged as Urgent, Meeting, Order, Payment
+                      or AI Answer in seconds.
                     </p>
                   </div>
                 </div>
@@ -235,7 +232,8 @@ export const LandingPage: React.FC = () => {
                       Analytics at a glance
                     </p>
                     <p className="text-xs text-slate-600">
-                      Track volume, response time and more from a clean dashboard.
+                      Track volume, response time and more from a clean
+                      dashboard.
                     </p>
                   </div>
                 </div>
@@ -244,20 +242,168 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* Features Section */}
+      <section
+        id="features"
+        className="border-t border-slate-200 bg-[#F5FBFF] py-20"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Heading */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              Powerful features for your inbox
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Inboxonic makes email effortless — from smart categorization to AI
+              replies. Everything works automatically, on top of your existing
+              Gmail.
+            </p>
+          </div>
+
+          {/* Feature Grid */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Feature 1 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                Smart categorization
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Emails are automatically sorted into Urgent, Meeting, Order,
+                Payment and AI Answer — no manual labels ever again.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                Priority scoring
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                AI detects the importance of every email so that crucial
+                messages appear first.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                Auto-reply suggestions
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Get AI-generated responses you can send with one click — or
+                customize before sending.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                Analytics dashboard
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Track email trends, response time and category breakdowns — all
+                inside your dashboard.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                Works with Gmail
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Keep using Gmail — Inboxonic just adds AI logic on top with
+                labels & syncing.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
+              <p className="text-lg font-semibold text-slate-900">
+                No extra apps needed
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                Everything runs in browser. No downloads, no setup headaches.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="border-t border-slate-200 bg-white py-20"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Heading + subheading */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              How Inboxonic works
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Plug in your Gmail once. From that moment, every incoming email
+              gets processed by our AI pipeline – within milliseconds.
+            </p>
+          </div>
+
+          {/* Step cards */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Step 1 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 1
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                Connect your Gmail
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Securely authenticate with Google OAuth. We only request the
+                scopes required to read and label your emails.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 2
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                AI categorizes in real time
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                Our models scan subject, content and metadata to assign the best
+                category and priority score to every message.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="rounded-[32px] border border-slate-200 bg-white px-7 py-8 shadow-sm">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+                Step 3
+              </p>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">
+                You work from a clean inbox
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-600">
+                View everything inside your Inboxonic dashboard or keep using
+                Gmail — your labels and filters stay perfectly in sync.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Security / FAQ – reuse but match palette */}
-      <section
-        id="faq"
-        className="border-t border-lime-100 bg-[#EAF6FF] py-16"
-      >
+      <section id="faq" className="border-t border-lime-100 bg-[#EAF6FF] py-16">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:px-8">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">
               Built with security in mind
             </h2>
             <p className="mt-3 text-sm text-slate-700 sm:text-base">
-              We never store your Google password and only use OAuth to access your
-              inbox. Data is transmitted over HTTPS and stored using
+              We never store your Google password and only use OAuth to access
+              your inbox. Data is transmitted over HTTPS and stored using
               industry-standard encryption.
             </p>
             <div className="mt-5 flex items-start gap-3 text-sm text-slate-800">
@@ -265,8 +411,8 @@ export const LandingPage: React.FC = () => {
                 <Brain className="h-4 w-4 text-lime-200" />
               </div>
               <span>
-                AI runs on your configured provider — you stay in control of your
-                prompts, data and costs.
+                AI runs on your configured provider — you stay in control of
+                your prompts, data and costs.
               </span>
             </div>
           </div>
@@ -277,8 +423,9 @@ export const LandingPage: React.FC = () => {
                 Do I have to change my email client?
               </p>
               <p>
-                No. Inboxonic works on top of Gmail. Keep using your existing apps
-                while we handle categorization and automation in the background.
+                No. Inboxonic works on top of Gmail. Keep using your existing
+                apps while we handle categorization and automation in the
+                background.
               </p>
             </div>
             <div>
@@ -295,8 +442,8 @@ export const LandingPage: React.FC = () => {
                 Is there a free plan?
               </p>
               <p>
-                We offer a 2-day free trial with all features unlocked so you can
-                see the value before upgrading.
+                We offer a 2-day free trial with all features unlocked so you
+                can see the value before upgrading.
               </p>
             </div>
           </div>

@@ -56,17 +56,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             Home
           </button>
           <button
-            onClick={() => scrollToSection("features")}
-            className="hover:text-slate-950"
-          >
-            Features
-          </button>
-          <button
             onClick={() => scrollToSection("why-us")}
             className="hover:text-slate-950"
           >
             Why us
           </button>
+          <button
+            onClick={() => scrollToSection("features")}
+            className="hover:text-slate-950"
+          >
+            Features
+          </button>
+          
           <button
             onClick={() => scrollToSection("faq")}
             className="hover:text-slate-950"
@@ -127,17 +128,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Home
             </button>
-            <button
-              onClick={() => handleNavClick("features")}
-              className="text-left hover:text-slate-950"
-            >
-              Features
-            </button>
+            
             <button
               onClick={() => handleNavClick("why-us")}
               className="text-left hover:text-slate-950"
             >
               Why us
+            </button>
+            <button
+              onClick={() => handleNavClick("features")}
+              className="text-left hover:text-slate-950"
+            >
+              Features
             </button>
             <button
               onClick={() => handleNavClick("faq")}
