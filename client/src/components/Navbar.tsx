@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 type NavbarProps = {
   isAuthenticated: boolean;
@@ -74,11 +74,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Mobile hamburger */}
         <div className="flex items-center gap-4">
           <button
+            type="button"
             ref={btnRef}
             onClick={() => setMobileOpen((s) => !s)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            className="inline-flex items-center justify-center rounded-md p-2 text-slate-800 hover:bg-slate-100 focus:outline-none sm:hidden"
+            className="relative z-40 inline-flex items-center justify-center rounded-md p-2 text-slate-800 hover:bg-slate-100 focus:outline-none sm:hidden"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
