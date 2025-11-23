@@ -13,38 +13,41 @@ export const Navbar: React.FC<NavbarProps> = ({
   scrollToSection,
 }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const menuRef = React.useRef<HTMLDivElement | null>(null);
-  const btnRef = React.useRef<HTMLButtonElement | null>(null);
 
+  // Close on Escape key
   React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileOpen(false);
-    };
-    const onDocClick = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (!mobileOpen) return;
-      if (menuRef.current && !menuRef.current.contains(target) && btnRef.current && !btnRef.current.contains(target)) {
-        setMobileOpen(false);
-      }
-    };
-    document.addEventListener('keydown', onKey);
-    document.addEventListener('click', onDocClick);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('click', onDocClick);
-    };
-  }, [mobileOpen]);
-  return (
-    <header className="relative sticky top-0 z-20 border-b border-lime-100 bg-[#E8FFC6]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2">
-          <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-16" />
+    if (!mobileOpen) return;
 
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  const handleNavClick = (id: string) => {
+    scrollToSection(id);
+    setMobileOpen(false);
+  };
+
+  const handleGetStarted = () => {
+    onGetStarted();
+    setMobileOpen(false);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6]">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-12" />
           <span className="text-lg font-semibold tracking-tight">
             Inboxonic
           </span>
         </div>
 
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-800 sm:flex">
           <button
             onClick={() => scrollToSection("hero")}
@@ -71,19 +74,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             FAQ
           </button>
         </nav>
-        {/* Mobile hamburger */}
+
+        {/* Right side: CTA + mobile menu button */}
         <div className="flex items-center gap-4">
+          {/* Mobile hamburger */}
           <button
             type="button"
-            ref={btnRef}
             onClick={() => setMobileOpen((s) => !s)}
             aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            className="relative z-40 inline-flex items-center justify-center rounded-md p-2 text-slate-800 hover:bg-slate-100 focus:outline-none sm:hidden"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            className="inline-flex items-center justify-center rounded-md p-2 text-slate-800 hover:bg-slate-100 focus:outline-none sm:hidden"
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
 
+          {/* Desktop CTA */}
           <div className="hidden sm:flex">
             <button
               onClick={onGetStarted}
@@ -94,49 +103,58 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Mobile menu overlay (always rendered for smooth transitions) */}
+        {/* Mobile backdrop */}
+        {mobileOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/30 sm:hidden"
+            onClick={() => setMobileOpen(false)}
+          />
+        )}
+
+        {/* Mobile menu panel */}
         <div
-          className={`sm:hidden absolute left-4 right-4 top-full z-30 mt-2 transition-transform duration-300 ease-out
-            ${mobileOpen ? 'opacity-100 translate-y-2 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}`}
+          className={`sm:hidden fixed left-4 right-4 top-16 z-50 origin-top rounded-lg border border-lime-100 bg-[#E8FFC6] p-4 shadow-lg transition-transform duration-200 ease-out ${
+            mobileOpen
+              ? "opacity-100 translate-y-0 scale-100"
+              : "pointer-events-none opacity-0 -translate-y-2 scale-95"
+          }`}
           aria-hidden={!mobileOpen}
         >
-          <div ref={menuRef} className="rounded-lg border border-lime-100 bg-[#E8FFC6] p-4 shadow-lg transition-opacity duration-200">
-            <nav className="flex flex-col gap-3 text-sm font-medium text-slate-800">
-              <button
-                onClick={() => { scrollToSection('hero'); setMobileOpen(false); }}
-                className="text-left hover:text-slate-950"
-              >
-                Home
-              </button>
-              <button
-                onClick={() => { scrollToSection('features'); setMobileOpen(false); }}
-                className="text-left hover:text-slate-950"
-              >
-                Features
-              </button>
-              <button
-                onClick={() => { scrollToSection('why-us'); setMobileOpen(false); }}
-                className="text-left hover:text-slate-950"
-              >
-                Why us
-              </button>
-              <button
-                onClick={() => { scrollToSection('faq'); setMobileOpen(false); }}
-                className="text-left hover:text-slate-950"
-              >
-                FAQ
-              </button>
+          <nav className="flex flex-col gap-3 text-sm font-medium text-slate-800">
+            <button
+              onClick={() => handleNavClick("hero")}
+              className="text-left hover:text-slate-950"
+            >
+              Home
+            </button>
+            <button
+              onClick={() => handleNavClick("features")}
+              className="text-left hover:text-slate-950"
+            >
+              Features
+            </button>
+            <button
+              onClick={() => handleNavClick("why-us")}
+              className="text-left hover:text-slate-950"
+            >
+              Why us
+            </button>
+            <button
+              onClick={() => handleNavClick("faq")}
+              className="text-left hover:text-slate-950"
+            >
+              FAQ
+            </button>
 
-              <div className="mt-2 border-t border-lime-100 pt-3">
-                <button
-                  onClick={() => { onGetStarted(); setMobileOpen(false); }}
-                  className="w-full rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-lime-100 shadow-sm"
-                >
-                  {isAuthenticated ? 'Open Dashboard' : 'Get Started'}
-                </button>
-              </div>
-            </nav>
-          </div>
+            <div className="mt-2 border-t border-lime-100 pt-3">
+              <button
+                onClick={handleGetStarted}
+                className="w-full rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-lime-100 shadow-sm"
+              >
+                {isAuthenticated ? "Open Dashboard" : "Get Started"}
+              </button>
+            </div>
+          </nav>
         </div>
       </div>
     </header>
