@@ -37,6 +37,16 @@
         background-attachment: fixed;
     }
 
+    /* Enable smooth scrolling for anchor and programmatic scrolls */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Improve momentum scrolling on touch devices */
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+
     #root {
         width: 100%;
         min-height: 100vh;

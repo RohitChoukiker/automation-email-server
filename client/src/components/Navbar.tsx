@@ -139,17 +139,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               Home
             </button>
             
-            <button
-              onClick={() => handleNavClick("why-us")}
-              className="text-left hover:text-slate-950"
-            >
-              Why us
-            </button>
+            
             <button
               onClick={() => handleNavClick("features")}
               className="text-left hover:text-slate-950"
             >
               Features
+            </button>
+            <button
+              onClick={() => handleNavClick("why-us")}
+              className="text-left hover:text-slate-950"
+            >
+              Why us
             </button>
             <button
               onClick={() => handleNavClick("faq")}
