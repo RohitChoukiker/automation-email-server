@@ -72,7 +72,7 @@ export const LandingPage: React.FC = () => {
             <h1 className="mb-5 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem]">
               Fast and reliable{' '}
               <span className="relative inline-block">
-                <span className="relative z-10">intelligent</span>
+                <span className="relative z-10">smart email</span>
                 <span
                   aria-hidden
                   className="absolute inset-x-[-4px] bottom-0 top-1 rounded-md bg-[#E8FFC6]"
@@ -160,70 +160,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-            {/* How it works */}
-      <section
-        id="how-it-works"
-        className="border-t border-lime-100 bg-[#FFFDF5] py-20"
-      >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          {/* Heading + subheading */}
-          <div className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              How Inboxonic works
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-              Plug in your Gmail once. From that moment, every incoming email
-              gets processed by our AI pipeline – within milliseconds.
-            </p>
-          </div>
-
-          {/* Steps cards */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {/* Step 1 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 1
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                Connect your Gmail
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                Securely authenticate with Google OAuth. We only request the
-                scopes required to read and label your emails.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 2
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                AI categorizes in real time
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                Our models scan subject, content and metadata to assign the
-                best category and priority score to every message.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="rounded-3xl border border-slate-200 bg-white px-7 py-8 shadow-sm">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Step 3
-              </p>
-              <h3 className="mb-3 text-base font-semibold text-slate-900">
-                You work from a clean inbox
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
-                View everything inside your Inboxonic dashboard or keep using
-                Gmail — your labels and filters stay perfectly in sync.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
 
       {/* Why us section */}
       <section
