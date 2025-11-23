@@ -8,7 +8,7 @@ import { analyzeEmailAI } from "../services/aiService.js";
 const router = express.Router();
 
 /**
- * 📋 GET /api/emails → Get All Emails from DB
+  GET /api/emails → Get All Emails from DB
  */
 router.get("/", protect, async (req, res) => {
   try {
@@ -33,7 +33,7 @@ router.get("/", protect, async (req, res) => {
 });
 
 /**
- * 📨 GET /api/emails/fetch → Gmail Inbox Se Latest Emails
+ *  GET /api/emails/fetch → Gmail Inbox Se Latest Emails
  */
 function getOAuth2ClientForUser(user) {
   if (!user.googleRefreshToken) {
@@ -53,9 +53,7 @@ function getOAuth2ClientForUser(user) {
   return client;
 }
 
-/**
- * 📩 RFC822 Format for Gmail Send API
- */
+
 function createRawMessage({ from, to, subject, text }) {
   const lines = [
     `From: ${from}`,
@@ -74,7 +72,7 @@ function createRawMessage({ from, to, subject, text }) {
 }
 
 /**
- * 📨 GET /api/emails/fetch → Gmail Inbox Se Latest Emails
+ * GET /api/emails/fetch → Gmail Inbox Se Latest Emails
  */
 router.get("/fetch", protect, async (req, res) => {
   try {
@@ -120,7 +118,7 @@ router.get("/fetch", protect, async (req, res) => {
 });
 
 /**
- * 🧠 POST /api/emails/analyze → AI Summary + DB Save
+ * POST /api/emails/analyze → AI Summary + DB Save
  */
 router.post("/analyze", protect, async (req, res) => {
   try {
@@ -170,7 +168,7 @@ router.post("/analyze", protect, async (req, res) => {
 });
 
 /**
- * ✉ POST /api/emails/send/:id → Gmail Reply Send
+ *  POST /api/emails/send/:id → Gmail Reply Send
  */
 router.post("/send/:id", protect, async (req, res) => {
   try {
@@ -212,7 +210,7 @@ router.post("/send/:id", protect, async (req, res) => {
 });
 
 /**
- * 📌 GET /api/emails/:id → Single Email
+ *  GET /api/emails/:id → Single Email
  */
 router.get("/:id", protect, async (req, res) => {
   try {
