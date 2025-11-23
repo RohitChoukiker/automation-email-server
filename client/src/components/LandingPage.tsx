@@ -92,17 +92,14 @@ export const LandingPage: React.FC = () => {
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </button>
               ) : (
-                <div className="w-full sm:w-auto">
-                  <GoogleLogin
-                    onSuccess={login}
-                    onError={() => {
-                      console.log("Login Failed");
-                    }}
-                    theme="outline"
-                    shape="pill"
-                    size="large"
-                    text="continue_with"
-                  />
+                <div className="w-full sm:w-auto flex items-center gap-3">
+                 
+                  <button
+                    onClick={handleGetStarted}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
+                  >
+                    Get Started
+                  </button>
                 </div>
               )}
 
