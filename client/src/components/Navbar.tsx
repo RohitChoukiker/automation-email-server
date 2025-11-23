@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail } from "lucide-react";
+import { Mail, Menu, X } from "lucide-react";
 
 type NavbarProps = {
   isAuthenticated: boolean;
@@ -12,11 +12,33 @@ export const Navbar: React.FC<NavbarProps> = ({
   onGetStarted,
   scrollToSection,
 }) => {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const menuRef = React.useRef<HTMLDivElement | null>(null);
+  const btnRef = React.useRef<HTMLButtonElement | null>(null);
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    const onDocClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (!mobileOpen) return;
+      if (menuRef.current && !menuRef.current.contains(target) && btnRef.current && !btnRef.current.contains(target)) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('click', onDocClick);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('click', onDocClick);
+    };
+  }, [mobileOpen]);
   return (
-    <header className="sticky top-0 z-20 border-b border-lime-100 bg-[#E8FFC6]">
+    <header className="relative sticky top-0 z-20 border-b border-lime-100 bg-[#E8FFC6]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
-          <img src="/elogo.png" alt="Inboxonic Logo" className="h-16 w-16" />
+          <img src="/elogo.png" alt="Inboxonic Logo" className="h-10 w-16" />
 
           <span className="text-lg font-semibold tracking-tight">
             Inboxonic
@@ -49,18 +71,71 @@ export const Navbar: React.FC<NavbarProps> = ({
             FAQ
           </button>
         </nav>
-
+        {/* Mobile hamburger */}
         <div className="flex items-center gap-4">
-          <div className="hidden text-xs font-medium text-slate-800 sm:block">
-            <span className="font-semibold">Quick access:</span> Sign in with
-            Google
-          </div>
           <button
-            onClick={onGetStarted}
-            className="rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
+            ref={btnRef}
+            onClick={() => setMobileOpen((s) => !s)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            className="inline-flex items-center justify-center rounded-md p-2 text-slate-800 hover:bg-slate-100 focus:outline-none sm:hidden"
           >
-            {isAuthenticated ? "Open Dashboard" : "Get Started"}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
+
+          <div className="hidden sm:flex">
+            <button
+              onClick={onGetStarted}
+              className="rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
+            >
+              {isAuthenticated ? "Open Dashboard" : "Get Started"}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu overlay (always rendered for smooth transitions) */}
+        <div
+          className={`sm:hidden absolute left-4 right-4 top-full z-30 mt-2 transition-transform duration-300 ease-out
+            ${mobileOpen ? 'opacity-100 translate-y-2 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}`}
+          aria-hidden={!mobileOpen}
+        >
+          <div ref={menuRef} className="rounded-lg border border-lime-100 bg-[#E8FFC6] p-4 shadow-lg transition-opacity duration-200">
+            <nav className="flex flex-col gap-3 text-sm font-medium text-slate-800">
+              <button
+                onClick={() => { scrollToSection('hero'); setMobileOpen(false); }}
+                className="text-left hover:text-slate-950"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => { scrollToSection('features'); setMobileOpen(false); }}
+                className="text-left hover:text-slate-950"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => { scrollToSection('why-us'); setMobileOpen(false); }}
+                className="text-left hover:text-slate-950"
+              >
+                Why us
+              </button>
+              <button
+                onClick={() => { scrollToSection('faq'); setMobileOpen(false); }}
+                className="text-left hover:text-slate-950"
+              >
+                FAQ
+              </button>
+
+              <div className="mt-2 border-t border-lime-100 pt-3">
+                <button
+                  onClick={() => { onGetStarted(); setMobileOpen(false); }}
+                  className="w-full rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-lime-100 shadow-sm"
+                >
+                  {isAuthenticated ? 'Open Dashboard' : 'Get Started'}
+                </button>
+              </div>
+            </nav>
+          </div>
         </div>
       </div>
     </header>
