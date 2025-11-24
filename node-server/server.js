@@ -10,6 +10,7 @@ import logger from "./utils/logger.js";
 
 import authRoutes from "./routes/auth-routes.js";
 import emailRoutes from "./routes/email-routes.js";
+import userRoutes from "./routes/user-routes.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/emails", emailRoutes);
+app.use("/api/user", userRoutes);
 
 // Serve client static files (Vite build output) and fallback to index.html for SPA routes
 const __filename = fileURLToPath(import.meta.url);

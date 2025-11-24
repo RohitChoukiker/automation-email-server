@@ -139,6 +139,10 @@ router.post("/analyze", protect, async (req, res) => {
       return res.status(400).json({ message: "Subject & body/snippet are required." });
     }
 
+    // Respect user's automation setting
+    if (req.user && req.user.automationEnabled === false) {
+      return res.status(403).json({ message: "Automation is disabled for this user." });
+    }
     const ai = await analyzeEmailAI({
       subject,
       body: finalBody,

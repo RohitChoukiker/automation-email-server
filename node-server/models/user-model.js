@@ -67,6 +67,7 @@ const userSchema = new mongoose.Schema(
 
     defaultTone: { type: String, default: "friendly" },
     autoSend: { type: Boolean, default: false },
+    automationEnabled: { type: Boolean, default: true },
     followupDays: { type: Number, default: 3 },
   },
   { timestamps: true }
