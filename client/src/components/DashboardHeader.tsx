@@ -100,6 +100,8 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
             )}
           </button>
 
+          
+
           <div ref={profileRef} className="relative">
             <button
               onClick={() => setShowProfile((s) => !s)}
