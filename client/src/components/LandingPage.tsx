@@ -5,12 +5,12 @@ import {
   Zap,
   Shield,
   BarChart3,
+  Search,
   CheckCircle,
   ArrowRight,
   PlayCircle,
   Brain,
 } from "lucide-react";
-import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "../context/AuthProvider";
 import { LoginModal } from "./LoginModal";
 import { Navbar } from "./Navbar";
@@ -220,7 +220,8 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-            {/* Features Section */}
+      {/* Features Section */}
+
       <section
         id="features"
         className="border-t border-slate-200 bg-[#F5FBFF] py-20"
@@ -238,95 +239,144 @@ export const LandingPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Feature Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Feature 1 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-sky-50 blur-2xl group-hover:bg-sky-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <Zap className="h-5 w-5" />
+          {/* Unique layout: big feature board + side stack */}
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] items-start">
+            {/* LEFT – Feature board */}
+            <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/95 p-8 shadow-sm">
+              {/* soft blob */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#E8FFC6] blur-3xl" />
+
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900 text-[11px] font-semibold uppercase tracking-[0.18em] text-lime-100 px-4 py-1.5">
+                <Zap className="h-3.5 w-3.5" />
+                <span>Automation hub</span>
               </div>
-              <p className="text-lg font-semibold text-slate-900">
-                Smart categorization
+
+              <h3 className="mb-4 text-xl font-semibold text-slate-900">
+                Everything your inbox needs, in one place.
+              </h3>
+              <p className="mb-6 text-sm text-slate-600">
+                From instantly sorting emails to drafting replies, Inboxonic
+                keeps the mess away so you can focus on actual work.
               </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Emails are automatically sorted into Urgent, Meeting, Order,
-                Payment and AI Answer — no manual labels ever again.
-              </p>
+
+              <div className="mt-4 space-y-5">
+                {/* Smart categorization */}
+                <div className="flex gap-3 rounded-2xl bg-slate-50/80 p-4">
+                  <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                    <Zap className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">
+                      Smart categorization
+                    </p>
+                    <p className="mt-1 text-xs text-slate-600">
+                      Emails are automatically sorted into Urgent, Meeting,
+                      Order, Payment and AI Answer — no manual labels ever
+                      again.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Priority scoring */}
+                <div className="flex gap-3 rounded-2xl border border-slate-100 bg-white p-4">
+                  <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                    <BarChart3 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">
+                      Priority scoring
+                    </p>
+                    <p className="mt-1 text-xs text-slate-600">
+                      AI detects the importance of every email so that crucial
+                      messages appear first.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Auto reply */}
+                <div className="flex gap-3 rounded-2xl border border-slate-100 bg-white p-4">
+                  <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">
+                      Auto-reply suggestions
+                    </p>
+                    <p className="mt-1 text-xs text-slate-600">
+                      Get AI-generated responses you can send with one click —
+                      or customize before sending.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-50 blur-2xl group-hover:bg-emerald-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <BarChart3 className="h-5 w-5" />
+            {/* RIGHT – Stacked secondary features */}
+            <div className="space-y-5 py-8">
+              {/* Works with Gmail */}
+              <div className="group flex gap-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md">
+                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    Works with Gmail
+                  </p>
+                  <p className="mt-1 text-xs text-slate-600">
+                    Keep using Gmail — Inboxonic just adds AI logic on top with
+                    labels &amp; syncing.
+                  </p>
+                </div>
               </div>
-              <p className="text-lg font-semibold text-slate-900">
-                Priority scoring
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                AI detects the importance of every email so that crucial
-                messages appear first.
-              </p>
-            </div>
 
-            {/* Feature 3 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-fuchsia-50 blur-2xl group-hover:bg-fuchsia-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <Mail className="h-5 w-5" />
+              {/* Analytics dashboard */}
+              <div className="group flex gap-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md">
+                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                  <BarChart3 className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    Analytics dashboard
+                  </p>
+                  <p className="mt-1 text-xs text-slate-600">
+                    Track email trends, response time and category breakdowns —
+                    all inside your dashboard.
+                  </p>
+                </div>
               </div>
-              <p className="text-lg font-semibold text-slate-900">
-                Auto-reply suggestions
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Get AI-generated responses you can send with one click — or
-                customize before sending.
-              </p>
-            </div>
 
-            {/* Feature 4 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-amber-50 blur-2xl group-hover:bg-amber-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <BarChart3 className="h-5 w-5" />
+              {/* Smart search & filters */}
+              <div className="group flex gap-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md">
+                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                  <Search className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    Smart search & filters
+                  </p>
+                  <p className="mt-1 text-xs text-slate-600">
+                    Instantly find emails with AI-powered search, filters and
+                    quick shortcuts.
+                  </p>
+                </div>
               </div>
-              <p className="text-lg font-semibold text-slate-900">
-                Analytics dashboard
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Track email trends, response time and category breakdowns — all
-                inside your dashboard.
-              </p>
-            </div>
 
-            {/* Feature 5 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-sky-50 blur-2xl group-hover:bg-sky-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <Mail className="h-5 w-5" />
+              {/* No extra apps */}
+              <div className="group flex gap-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md">
+                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    No extra apps needed
+                  </p>
+                  <p className="mt-1 text-xs text-slate-600">
+                    Everything runs in browser. No downloads, no setup
+                    headaches.
+                  </p>
+                </div>
               </div>
-              <p className="text-lg font-semibold text-slate-900">
-                Works with Gmail
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Keep using Gmail — Inboxonic just adds AI logic on top with
-                labels &amp; syncing.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="group relative overflow-hidden rounded-[32px] border border-slate-200 bg-white/90 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-50 blur-2xl group-hover:bg-emerald-100" />
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-lime-100">
-                <Shield className="h-5 w-5" />
-              </div>
-              <p className="text-lg font-semibold text-slate-900">
-                No extra apps needed
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                Everything runs in browser. No downloads, no setup headaches.
-              </p>
+              
             </div>
           </div>
         </div>
@@ -415,7 +465,6 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
-
 
       {/* Security / FAQ – reuse but match palette */}
       <section id="faq" className="border-t border-lime-100 bg-[#EAF6FF] py-16">
