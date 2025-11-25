@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Mail } from 'lucide-react';
+import { X } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthProvider';
 
@@ -10,13 +10,73 @@ interface LoginModalProps {
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const { login } = useAuth();
+  const [isVisible, setIsVisible] = React.useState(false);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+
+  // Handle animation on mount/unmount
+  React.useEffect(() => {
+    if (isOpen) {
+      // Small delay to trigger animation
+      setTimeout(() => setIsVisible(true), 10);
+    } else {
+      setIsVisible(false);
+    }
+  }, [isOpen]);
+
+  // Handle click outside
+  React.useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    // Add a small delay to prevent immediate closing
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
+  // Handle Escape key
+  React.useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+    <div 
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
+        isVisible 
+          ? 'bg-slate-900/40 backdrop-blur-sm' 
+          : 'bg-slate-900/0 backdrop-blur-none'
+      }`}
+    >
       {/* Card */}
-      <div className="relative w-full max-w-md rounded-3xl border border-lime-100 bg-[#FFFDF5] px-7 py-8 shadow-2xl shadow-slate-900/20">
+      <div 
+        ref={modalRef}
+        className={`relative w-full max-w-md rounded-3xl border border-lime-100 bg-[#FFFDF5] px-7 py-8 shadow-2xl shadow-slate-900/20 transition-all duration-300 ${
+          isVisible 
+            ? 'scale-100 opacity-100 translate-y-0' 
+            : 'scale-95 opacity-0 translate-y-4'
+        }`}
+      >
         {/* Close */}
         <button
           onClick={onClose}

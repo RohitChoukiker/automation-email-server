@@ -13,6 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   scrollToSection,
 }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const mobileMenuRef = React.useRef<HTMLDivElement>(null);
 
   // Close on Escape key
   React.useEffect(() => {
@@ -26,6 +27,30 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
+  // Close on outside click
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node)
+      ) {
+        setMobileOpen(false);
+      }
+    };
+
+    // Add a small delay to prevent immediate closing when opening
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [mobileOpen]);
+
   const handleNavClick = (id: string) => {
     scrollToSection(id);
     setMobileOpen(false);
@@ -37,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6]">
+    <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6] backdrop-blur-md shadow-sm z-50">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -124,6 +149,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile menu panel */}
         <div
+          ref={mobileMenuRef}
           className={`sm:hidden fixed left-4 right-4 top-16 z-50 origin-top rounded-lg border border-lime-100 bg-[#E8FFC6] p-4 shadow-lg transition-transform duration-200 ease-out ${
             mobileOpen
               ? "opacity-100 translate-y-0 scale-100"

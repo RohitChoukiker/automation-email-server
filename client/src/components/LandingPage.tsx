@@ -61,100 +61,178 @@ export const LandingPage: React.FC = () => {
       />
 
       {/* Hero section */}
-      <section id="hero" className="bg-[#EAF6FF] pb-16 pt-12 sm:pt-16 lg:pt-20">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-16 lg:px-8">
-          {/* Left column */}
-          <div className="max-w-xl">
-            <h1 className="mb-5 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem]">
-              Fast and reliable{" "}
-              <span className="relative inline-block">
-                <span className="relative z-10">smart email</span>
-                <span
-                  aria-hidden
-                  className="absolute inset-x-[-4px] bottom-0 top-1 rounded-md bg-[#E8FFC6]"
-                />
-              </span>{" "}
-              automation
-            </h1>
+ <section
+  id="hero"
+  className="relative overflow-hidden bg-gradient-to-b from-[#EAF6FF] via-[#F4F7FF] to-white pb-16 pt-12 sm:pt-16 lg:pt-20"
+>
+  {/* Soft background blobs */}
+  <div className="pointer-events-none absolute inset-0 -z-10">
+    <div className="absolute -left-24 top-[-80px] h-56 w-56 rounded-full bg-sky-200/40 blur-3xl" />
+    <div className="absolute right-[-80px] top-20 h-64 w-64 rounded-full bg-indigo-200/40 blur-3xl" />
+    <div className="absolute bottom-[-100px] left-1/3 h-52 w-52 rounded-full bg-lime-200/30 blur-3xl" />
+  </div>
 
-            <p className="mb-7 text-base leading-relaxed text-slate-700 sm:text-lg">
-              Inboxonic sits on top of Gmail, instantly sorting, prioritizing,
-              and even replying to the emails that matter – so your digital
-              workspace always feels as clean as a freshly serviced office.
-            </p>
+  <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-16 lg:px-8">
+    {/* Left column */}
+    <div className="max-w-xl">
+     
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              {isAuthenticated ? (
-                <button
-                  onClick={handleGetStarted}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold text-lime-100 shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
-                >
-                  Open Dashboard
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </button>
-              ) : (
-                <div className="w-full sm:w-auto flex items-center gap-3">
-                  <button
-                    onClick={handleGetStarted}
-                    className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-slate-900 px-5 py-2 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800"
-                  >
-                    Get Started
-                  </button>
-                </div>
-              )}
+      <h1 className="mb-5 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem]">
+        Fast and reliable{" "}
+        <span className="relative inline-block">
+          <span className="relative z-10">smart email</span>
+          <span
+            aria-hidden
+            className="absolute inset-x-[-4px] bottom-0 top-1 rounded-md bg-[#E8FFC6]"
+          />
+        </span>{" "}
+        automation
+      </h1>
 
-              <button
-                onClick={handlePlayDemo}
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/90 px-7 py-2.5 text-sm font-medium text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-white sm:w-auto"
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900/90 text-lime-100">
-                  <PlayCircle className="h-4 w-4" />
-                </span>
-                Play demo
-              </button>
-            </div>
+      <p className="mb-7 text-base leading-relaxed text-slate-700 sm:text-lg">
+        Inboxonic sits on top of Gmail, instantly sorting, prioritizing,
+        and even replying to the emails that matter – so your digital
+        workspace always feels as clean as a freshly serviced office.
+      </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-4 text-xs text-slate-600">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
-                <span>No credit card required</span>
-              </div>
-              <span className="hidden h-1 w-1 rounded-full bg-slate-400 sm:inline-block" />
-              <div className="flex items-center gap-1.5">
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
-                <span>2-day full-feature trial</span>
-              </div>
-              <span className="hidden h-1 w-1 rounded-full bg-slate-400 sm:inline-block" />
-              <div className="flex items-center gap-1.5">
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
-                <span>Works with your existing Gmail</span>
-              </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        {isAuthenticated ? (
+          <button
+            onClick={handleGetStarted}
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold text-lime-100 shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
+          >
+            Open Dashboard
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </button>
+        ) : (
+          <div className="flex w-full items-center gap-3 sm:w-auto">
+            <button
+              onClick={handleGetStarted}
+              className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-900/10 bg-slate-900 px-6 py-2.5 text-xs font-semibold text-lime-100 shadow-sm transition hover:bg-slate-800 sm:flex-none"
+            >
+              Get Started
+            </button>
+          </div>
+        )}
+
+        {/* <button
+          onClick={handlePlayDemo}
+          className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/90 px-7 py-2.5 text-sm font-medium text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-white sm:w-auto"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900/90 text-lime-100">
+            <PlayCircle className="h-4 w-4" />
+          </span>
+          Play demo
+        </button> */}
+      </div>
+
+      <div className="mt-7 flex flex-wrap items-center gap-4 text-xs text-slate-600">
+        <div className="flex items-center gap-1.5">
+          <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+          <span>No credit card required</span>
+        </div>
+        <span className="hidden h-1 w-1 rounded-full bg-slate-400 sm:inline-block" />
+        <div className="flex items-center gap-1.5">
+          <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+          <span>2-day full-feature trial</span>
+        </div>
+        <span className="hidden h-1 w-1 rounded-full bg-slate-400 sm:inline-block" />
+        <div className="flex items-center gap-1.5">
+          <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+          <span>Works with your existing Gmail</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Right column – hero card */}
+    <div className="relative flex w-full justify-center lg:justify-end">
+      {/* subtle background halo */}
+      <div className="absolute inset-y-6 right-8 -z-10 hidden h-64 w-64 rounded-full bg-sky-200/40 blur-3xl lg:block" />
+
+      <div className="relative h-[320px] w-full max-w-[360px] overflow-hidden rounded-[40px] border border-slate-200/70 bg-white/95 shadow-xl shadow-slate-900/5 backdrop-blur-sm sm:h-[360px]">
+        {/* Top bar */}
+        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
+          <div className="flex items-center gap-2">
+            <img src="/elogo.png" alt="Inboxonic Logo" className="h-8 w-8 rounded-2xl" />
+            <div>
+              <p className="text-xs font-semibold text-slate-900">
+                Smart Inbox Preview
+              </p>
+              <p className="text-[11px] text-slate-500">
+                Today • 12 new emails
+              </p>
             </div>
           </div>
+          <span className="rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-700">
+            Live
+          </span>
+        </div>
 
-          {/* Right column – rounded hero card like Cleansy */}
-          <div className="relative flex w-full justify-center lg:justify-end">
-            <div className="relative h-[320px] w-[320px] overflow-hidden rounded-[46%] bg-[#FDFDFD] shadow-xl shadow-slate-900/5 sm:h-[360px] sm:w-[360px]">
-              <div className="absolute -left-10 -top-10 h-40 w-40 rounded-3xl bg-[#E8FFC6]" />
+        {/* Pills */}
+        <div className="flex flex-wrap gap-2 px-5 pt-3 text-[11px]">
+          <span className="rounded-full bg-sky-50 px-3 py-1 text-sky-700 ring-1 ring-sky-200">
+            Urgent
+          </span>
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700 ring-1 ring-emerald-200">
+            Meetings
+          </span>
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-700 ring-1 ring-amber-200">
+            Payments
+          </span>
+          <span className="rounded-full bg-fuchsia-50 px-3 py-1 text-fuchsia-700 ring-1 ring-fuchsia-200">
+            AI Answer
+          </span>
+        </div>
 
-              <div className="relative flex h-full flex-col items-center justify-center gap-4 px-8">
-                <img
-                  src="/elogo.png"
-                  alt="Inboxonic Logo"
-                  className="h-16 w-16"
-                />
-                <p className="text-center text-sm font-semibold text-slate-900">
-                  “My inbox feels freshly cleaned every morning.”
-                </p>
-                <p className="text-center text-xs text-slate-500">
-                  Inboxonic automatically groups Urgent, Meetings, Orders &amp;
-                  Payments so you can breeze through tasks.
-                </p>
-              </div>
+        {/* Fake email list */}
+        <div className="mt-3 space-y-2 px-5 pb-5 text-xs">
+          <div className="flex items-start justify-between gap-2 rounded-2xl bg-slate-50/90 p-3 ring-1 ring-slate-100">
+            <div>
+              <p className="font-semibold text-slate-900">
+                Payment overdue for Invoice #1042
+              </p>
+              <p className="line-clamp-1 text-[11px] text-slate-500">
+                Finance • Your payment for October is pending. Please complete within 24 hours…
+              </p>
             </div>
+            <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] font-medium text-amber-700 ring-1 ring-amber-200">
+              Payment
+            </span>
+          </div>
+
+          <div className="flex items-start justify-between gap-2 rounded-2xl bg-slate-50/90 p-3 ring-1 ring-slate-100">
+            <div>
+              <p className="font-semibold text-slate-900">
+                Project sync today at 4:30 PM
+              </p>
+              <p className="line-clamp-1 text-[11px] text-slate-500">
+                Calendar • You&apos;re invited to &quot;Q4 Planning Sync&quot; with the product team…
+              </p>
+            </div>
+            <span className="rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-700 ring-1 ring-emerald-200">
+              Meeting
+            </span>
+          </div>
+
+          <div className="flex items-start justify-between gap-2 rounded-2xl bg-slate-50/90 p-3 ring-1 ring-slate-100">
+            <div>
+              <p className="font-semibold text-slate-900">
+                Can you help me understand this report?
+              </p>
+              <p className="line-clamp-1 text-[11px] text-slate-500">
+                Client • I&apos;m a bit confused about the last section in the metrics dashboard…
+              </p>
+            </div>
+            <span className="rounded-full bg-fuchsia-50 px-2 py-1 text-[10px] font-medium text-fuchsia-700 ring-1 ring-fuchsia-200">
+              AI Answer
+            </span>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* How it works */}
       <section

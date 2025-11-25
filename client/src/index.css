@@ -40,11 +40,19 @@
     /* Enable smooth scrolling for anchor and programmatic scrolls */
     html {
         scroll-behavior: smooth;
+        scroll-padding-top: 80px; /* Account for fixed navbar */
     }
 
     /* Improve momentum scrolling on touch devices */
     body {
         -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+    
+    /* Smooth scrolling for all scrollable elements */
+    * {
+        scroll-behavior: smooth;
     }
 
     #root {
