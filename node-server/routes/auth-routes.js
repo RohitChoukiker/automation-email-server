@@ -78,7 +78,8 @@ router.get("/google/callback", async (req, res) => {
       picture: user.picture,
     }));
 
-    res.redirect(`http://localhost:5173/auth/callback?token=${jwtToken}&user=${userData}`);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/auth/callback?token=${jwtToken}&user=${userData}`);
   } catch (err) {
     console.error("Google callback error:", err.response?.data || err.message);
     res.status(500).send("Auth error");
