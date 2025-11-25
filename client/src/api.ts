@@ -1,9 +1,8 @@
 import type { Email, EmailCategory } from './types';
 
 
-//export const BACKEND_BASE_URL = 'http://localhost:5000'; // Development URL
+export const BACKEND_BASE_URL = 'http://localhost:5000'; // Development URL
 
-export const BACKEND_BASE_URL = 'https://inboxonic-api-server-861179148736.europe-west1.run.app'; // Production URL
 
 
 export const API_BASE_URL = `${BACKEND_BASE_URL}/api`;
