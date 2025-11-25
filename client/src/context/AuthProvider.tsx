@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <GoogleOAuthProvider clientId="861179148736-kkm15666ee6j5nngno7m33k8le0rajqr.apps.googleusercontent.com"> 
+    <GoogleOAuthProvider clientId="861179148736-kkxm15666ee6j5nngno7m33k8le0rajqr.apps.googleusercontent.com"> 
       <AuthContext.Provider value={{ user, login, loginWithUser, logout, isAuthenticated: !!user }}>
         {children}
       </AuthContext.Provider>

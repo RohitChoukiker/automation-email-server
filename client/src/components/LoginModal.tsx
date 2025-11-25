@@ -118,7 +118,27 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         {/* Fine print */}
         <div className="mt-6 rounded-2xl bg-[#EAF6FF] px-4 py-3 text-center text-[11px] leading-relaxed text-slate-600">
           We never store your Google password and only use OAuth to access your
-          inbox. By continuing, you agree to our Terms of Service and Privacy Policy.
+          inbox. By continuing, you agree to our{' '}
+          <button
+            onClick={() => {
+              onClose();
+              window.location.href = '/terms';
+            }}
+            className="font-medium text-slate-900 underline hover:text-slate-700"
+          >
+            Terms of Service
+          </button>{' '}
+          and{' '}
+          <button
+            onClick={() => {
+              onClose();
+              window.location.href = '/privacy';
+            }}
+            className="font-medium text-slate-900 underline hover:text-slate-700"
+          >
+            Privacy Policy
+          </button>
+          .
         </div>
       </div>
     </div>
