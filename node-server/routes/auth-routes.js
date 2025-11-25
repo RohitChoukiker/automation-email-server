@@ -16,7 +16,8 @@ router.get("/google", (req, res) => {
       scope: GOOGLE_SCOPES,
     });
 
-    res.json({ authUrl: url });
+    // Redirect directly to Google OAuth
+    res.redirect(url);
   } catch (err) {
     console.error("Google auth URL error:", err.message);
     res.status(500).json({ message: "Failed to generate auth URL" });
@@ -58,7 +59,7 @@ router.get("/google/callback", async (req, res) => {
     } else {
       user.googleAccessToken = tokens.access_token || user.googleAccessToken;
       if (tokens.refresh_token) {
-       
+
         user.googleRefreshToken = tokens.refresh_token;
       }
       if (tokens.expiry_date) {
@@ -69,19 +70,15 @@ router.get("/google/callback", async (req, res) => {
 
     const jwtToken = generateToken(user._id);
 
-  
-    return res.json({
-      token: jwtToken,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        picture: user.picture,
-      },
-    });
+    // Redirect to frontend with token and user data
+    const userData = encodeURIComponent(JSON.stringify({
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      picture: user.picture,
+    }));
 
-    // production me redirect bhi kar sakte:
-    // res.redirect(`http://localhost:3000/oauth/callback?token=${jwtToken}`);
+    res.redirect(`http://localhost:5173/auth/callback?token=${jwtToken}&user=${userData}`);
   } catch (err) {
     console.error("Google callback error:", err.response?.data || err.message);
     res.status(500).send("Auth error");

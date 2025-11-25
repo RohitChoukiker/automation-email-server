@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import NotFound from './components/NotFound';
 import Privacy from './components/Privacy';
 import Terms from './components/Terms';
+import AuthCallback from './components/AuthCallback';
 
 
 
@@ -18,6 +19,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route
               path="/dashboard"
               element={
