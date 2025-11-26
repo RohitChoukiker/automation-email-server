@@ -1,5 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import EmailPage from './components/EmailPage';
 import { LandingPage } from './components/LandingPage';
 import { AuthProvider } from './context/AuthProvider';
 import { ThemeProvider } from './context/ThemeContext';
@@ -30,6 +31,14 @@ function App() {
             />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route
+              path="/email/:id"
+              element={
+                <ProtectedRoute>
+                  <EmailPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

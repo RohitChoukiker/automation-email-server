@@ -2,20 +2,54 @@ import React from 'react';
 import { LogOut, Sun, Moon, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types';
+import { fetchMe, triggerAutomation } from '../api';
 
 type Props = {
   user?: User | null;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   onLogout: () => void;
+  onAutomationToggle?: (enabled: boolean) => void;
 };
 
-export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, onLogout }) => {
+export const DashboardHeader: React.FC<Props> = ({ user: propUser, theme, onToggleTheme, onLogout, onAutomationToggle }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [showProfile, setShowProfile] = React.useState(false);
+  const [user, setUser] = React.useState<User | null>(propUser || null);
+  const [loading, setLoading] = React.useState(true);
+  const [automationEnabled, setAutomationEnabled] = React.useState<boolean>(() => {
+    try {
+      return localStorage.getItem('automationEnabled') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
   const navigate = useNavigate();
   const profileRef = React.useRef<HTMLDivElement | null>(null);
   const mobileAvatarRef = React.useRef<HTMLButtonElement | null>(null);
+
+  // Fetch user data from /me API on mount
+  React.useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const userData = await fetchMe();
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Fallback to prop user if API fails
+        if (propUser) {
+          setUser(propUser);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, [propUser]);
 
   React.useEffect(() => {
     if (!mobileOpen) return;
@@ -53,9 +87,27 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
    
     navigate(path);
   };
+  const toggleAutomation = async (next?: boolean) => {
+    const newVal = typeof next === 'boolean' ? next : !automationEnabled;
+    setAutomationEnabled(newVal);
+    try {
+      localStorage.setItem('automationEnabled', newVal ? 'true' : 'false');
+    } catch (e) {
+      // ignore storage errors
+    }
+    if (typeof onAutomationToggle === 'function') {
+      try { onAutomationToggle(newVal); } catch (e) { console.warn('onAutomationToggle handler failed', e); }
+    }
+
+    try {
+      await triggerAutomation(newVal);
+    } catch (err) {
+      console.warn('Failed to persist automation state to server:', err);
+    }
+  };
   
   return (
-    <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6]">
+    <header className="sticky top-0 z-50 border-b border-lime-100 bg-[#E8FFC6]" aria-busy={loading}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-2 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -73,6 +125,18 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
 
         {/* Right side: profile + controls + mobile menu */}
         <div className="flex items-center gap-4">
+          {/* Automation toggle (desktop) */}
+          <div className="flex items-center gap-3 mr-2">
+            <span className="hidden sm:inline text-sm text-slate-700">Automation</span>
+            <button
+              onClick={() => toggleAutomation()}
+              aria-pressed={automationEnabled}
+              aria-label={automationEnabled ? 'Turn automation off' : 'Turn automation on'}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${automationEnabled ? 'bg-lime-500' : 'bg-slate-300'}`}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${automationEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
+          </div>
           {/* Mobile trigger: show user avatar on mobile, fallback to hamburger */}
           <button
             type="button"
@@ -112,6 +176,7 @@ export const DashboardHeader: React.FC<Props> = ({ user, theme, onToggleTheme, o
               )}
               <span className="text-sm font-medium text-gray-700">{user?.name}</span>
             </button>
+            
 
             <div
               className={`fixed left-4 right-4 top-12 z-50 rounded-lg border border-slate-200 bg-white shadow-lg sm:absolute sm:right-0 sm:mt-2 sm:w-56 transform transition-all duration-200 ease-out ${

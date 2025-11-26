@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import User from "../models/user-model.js";
 import { oauth2Client, GOOGLE_SCOPES } from "../services/googleOAuth.js";
 import { generateToken } from "../utils/generateToken.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -83,6 +84,27 @@ router.get("/google/callback", async (req, res) => {
   } catch (err) {
     console.error("Google callback error:", err.response?.data || err.message);
     res.status(500).send("Auth error");
+  }
+});
+
+// Get current authenticated user
+router.get("/me", protect, async (req, res) => {
+  try {
+    res.json({
+      id: req.user._id,
+      email: req.user.email,
+      name: req.user.name,
+      picture: req.user.picture,
+      defaultTone: req.user.defaultTone,
+      autoSend: req.user.autoSend,
+      automationEnabled: req.user.automationEnabled,
+      followupDays: req.user.followupDays,
+      createdAt: req.user.createdAt,
+      updatedAt: req.user.updatedAt,
+    });
+  } catch (err) {
+    console.error("Get user error:", err.message);
+    res.status(500).json({ message: "Failed to get user information" });
   }
 });
 

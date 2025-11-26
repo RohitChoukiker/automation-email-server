@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
 
+
 export const connectDB = async () => {
   try {
+   
     await mongoose.connect(process.env.MONGO_URI, {
       dbName: "Inboxonic",
     });
-    console.log("MongoDB connected");
+    console.log("Database connected");
+   
+
   } catch (err) {
-    console.error("MongoDB connection error:", err.message);
+    console.error("Database connection error:", err.message);
     process.exit(1);
   }
 };

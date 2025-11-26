@@ -15,16 +15,35 @@ const emailSchema = new mongoose.Schema(
     summary: { type: String },
     intent: {
       type: String,
-      enum: ["LEAD", "QUESTION", "SPAM", "FOLLOWUP", "OTHER"],
+      enum: [
+        "LEAD",
+        "SALES",
+        "PARTNERSHIP",
+        "INVESTOR",
+        "SUPPORT",
+        "BUG_REPORT",
+        "FEATURE_REQUEST",
+        "BILLING",
+        "MEETING",
+        "FOLLOWUP",
+        "QUESTION",
+        "HIRING",
+        "NEWSLETTER",
+        "PERSONAL",
+        "SPAM",
+        "OTHER",
+      ],
       default: "OTHER",
     },
+
+
     replyDraft: { type: String },
 
     status: {
       type: String,
       enum: ["PENDING", "REPLIED"],
-      default: "PENDING",
-    },
+      default: "PENDING"
+    }
   },
   { timestamps: true }
 );

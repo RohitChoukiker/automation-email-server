@@ -1,103 +1,107 @@
-import React from 'react';
-import type { Email } from '../types';
-import { Calendar, User, Tag, ArrowRight } from 'lucide-react';
-import { clsx } from 'clsx';
+import React from "react";
+import type { Email } from "../types";
+import { Calendar, Tag } from "lucide-react";
+import { clsx } from "clsx";
 
 interface EmailCardProps {
   email: Email;
+  onClick?: (email: Email) => void;
+  showCategory?: boolean;
 }
 
-export const EmailCard: React.FC<EmailCardProps> = ({ email }) => {
-  const categoryConfig = {
-    URGENT: { 
-      bg: 'bg-gradient-to-r from-red-500 to-pink-600', 
-      text: 'text-white',
-      glow: 'shadow-red-500/30'
-    },
-    MEETING: { 
-      bg: 'bg-gradient-to-r from-purple-500 to-indigo-600', 
-      text: 'text-white',
-      glow: 'shadow-purple-500/30'
-    },
-    ORDER: { 
-      bg: 'bg-gradient-to-r from-green-500 to-emerald-600', 
-      text: 'text-white',
-      glow: 'shadow-green-500/30'
-    },
-    PAYMENT: { 
-      bg: 'bg-gradient-to-r from-yellow-500 to-orange-600', 
-      text: 'text-white',
-      glow: 'shadow-yellow-500/30'
-    },
-    AI_ANSWER: { 
-      bg: 'bg-gradient-to-r from-blue-500 to-cyan-600', 
-      text: 'text-white',
-      glow: 'shadow-blue-500/30'
-    },
-    OTHER: { 
-      bg: 'bg-gradient-to-r from-gray-500 to-slate-600', 
-      text: 'text-white',
-      glow: 'shadow-gray-500/30'
-    },
-    ALL: { 
-      bg: 'bg-gradient-to-r from-gray-500 to-slate-600', 
-      text: 'text-white',
-      glow: 'shadow-gray-500/30'
-    },
+export const EmailCard: React.FC<EmailCardProps> = ({ email, onClick, showCategory = false }) => {
+  const categoryLabels: Record<string, string> = {
+    URGENT: "Urgent",
+    MEETING: "Meeting",
+    ORDER: "Order",
+    PAYMENT: "Payment",
+    AI_ANSWER: "AI Answer",
+    OTHER: "Other",
+    ALL: "All",
   };
 
-  const config = categoryConfig[email.category] || categoryConfig.OTHER;
+  const categoryColors: Record<string, string> = {
+    URGENT: "bg-pink-50 text-red-700 border-red-200",
+    MEETING: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    ORDER: "bg-sky-50 text-sky-700 border-sky-200",
+    PAYMENT: "bg-amber-50 text-amber-700 border-amber-200",
+    AI_ANSWER: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200",
+    OTHER: "bg-gray-50 text-gray-700 border-gray-200",
+    ALL: "bg-gray-50 text-gray-700 border-gray-200",
+  };
+
+  const category = email.category || "OTHER";
+  const categoryLabel = categoryLabels[category] || "Other";
+  const categoryClass = categoryColors[category] || categoryColors.OTHER;
+
+  const dateLabel = email.date
+    ? new Date(email.date).toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
+  const sender = email.from ;
+  const isRead = email.isRead;
 
   return (
-    <div className="group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-      {/* Gradient Border Effect on Hover */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-      
-      {/* Header */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <span className={clsx('px-3 py-1.5 rounded-full text-xs font-bold shadow-lg', config.bg, config.text, config.glow)}>
-            {email.category.replace('_', ' ')}
-          </span>
-          {email.isRead && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-              Read
+    <button
+      type="button"
+      onClick={() => onClick?.(email)}
+      className={clsx(
+        "w-full text-left",
+        "rounded-2xl border border-gray-100 bg-white",
+        "hover:bg-gray-50 hover:shadow-sm",
+    
+      )}
+    >
+      <div className="flex items-center gap-4 px-4 py-3">
+        {/* Left side: title + meta */}
+        <div className="flex-1 min-w-0">
+          {/* Title (subject) */}
+          <div className="flex items-center gap-2">
+            <p
+              className={clsx(
+                "truncate text-sm",
+                !isRead ? "font-semibold text-gray-900" : "font-medium text-gray-800"
+              )}
+            >
+              {email.subject || "(No subject)"}
+            </p>
+
+            {dateLabel && (
+              <span className="ml-auto flex items-center gap-1 text-[11px] text-gray-400">
+                <Calendar className="h-3 w-3" />
+                {dateLabel}
+              </span>
+            )}
+          </div>
+
+          {/* Subtitle: sender • snippet */}
+          <div className="mt-1 flex items-center gap-1 text-xs text-gray-500">
+            <span className="truncate font-medium text-gray-600">{sender}</span>
+            <span className="text-gray-300">•</span>
+            <span className="truncate">
+              {email.snippet }
             </span>
-          )}
+          </div>
         </div>
-        <div className="flex items-center text-gray-500 text-xs font-medium">
-          <Calendar className="w-3.5 h-3.5 mr-1.5" />
-          {new Date(email.date).toLocaleDateString()}
-        </div>
-      </div>
 
-      {/* Subject */}
-      <h3 className="text-xl font-display font-bold text-gray-900 mb-3 line-clamp-1 group-hover:text-purple-600 transition-colors duration-200">
-        {email.subject}
-      </h3>
-      
-      {/* From */}
-      <div className="flex items-center text-sm text-gray-600 mb-4">
-        <User className="w-4 h-4 mr-2 text-purple-500" />
-        <span className="truncate font-medium">{email.from}</span>
+        {/* Right side: category pill like in design */}
+        {category && showCategory && (
+          <span
+            className={clsx(
+              "inline-flex shrink-0 items-center gap-1 rounded-full border px-3 py-1",
+              "text-[11px] font-medium",
+              categoryClass
+            )}
+          >
+            <Tag className="h-3 w-3" />
+            {categoryLabel}
+          </span>
+        )}
       </div>
-
-      {/* Snippet */}
-      <p className="text-gray-600 text-sm line-clamp-2 mb-5 leading-relaxed">
-        {email.snippet}
-      </p>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-        <div className="flex items-center text-xs text-gray-400 font-mono">
-          <Tag className="w-3 h-3 mr-1.5" />
-          {email.id.slice(0, 8)}...
-        </div>
-        <button className="group/btn flex items-center gap-2 text-sm font-semibold text-purple-600 hover:text-purple-700 transition-colors duration-200">
-          View Details
-          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-200" />
-        </button>
-      </div>
-    </div>
+    </button>
   );
 };

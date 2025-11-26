@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Email, EmailCategory } from '../types';
 import { fetchEmails } from '../api';
 import { EmailCard } from './EmailCard';
@@ -12,6 +13,7 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadEmails = async () => {
@@ -56,10 +58,24 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {emails.map((email) => (
-        <EmailCard key={email.id} email={email} />
-      ))}
+    <div className="flex flex-col gap-4">
+      {/* Scrollable list container */}
+      <div className="overflow-auto max-h-[60vh] sm:max-h-[70vh] space-y-4">
+        {emails.map((email) => (
+          <EmailCard
+            key={email.id}
+            email={email}
+            onClick={() => {
+              // navigate to dedicated email page
+              // eslint-disable-next-line no-console
+              console.log('Navigate to email page:', email.id);
+              navigate(`/email/${email.id}`);
+            }}
+            showCategory={category === 'ALL'}
+          />
+        ))}
+      </div>
+      {/* Email detail is opened on a dedicated route */}
     </div>
   );
 };
