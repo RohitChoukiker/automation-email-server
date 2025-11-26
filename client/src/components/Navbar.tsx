@@ -5,12 +5,14 @@ type NavbarProps = {
   isAuthenticated: boolean;
   onGetStarted: () => void;
   scrollToSection: (id: string) => void;
+  showSections?: boolean;
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
   isAuthenticated,
   onGetStarted,
   scrollToSection,
+  showSections = true,
 }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const mobileMenuRef = React.useRef<HTMLDivElement>(null);
@@ -83,32 +85,37 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-800 sm:flex">
-          <button
-            onClick={() => scrollToSection("hero")}
-            className="hover:text-slate-950"
-          >
-            Home
-          </button>
-          
-          <button
-            onClick={() => scrollToSection("features")}
-            className="hover:text-slate-950"
-          >
-            Features
-          </button>
-          <button
-            onClick={() => scrollToSection("why-us")}
-            className="hover:text-slate-950"
-          >
-            Why us
-          </button>
-          
-          <button
-            onClick={() => scrollToSection("faq")}
-            className="hover:text-slate-950"
-          >
-            FAQ
-          </button>
+          {showSections && (
+            <>
+              <button
+                onClick={() => scrollToSection("hero")}
+                className="hover:text-slate-950"
+              >
+                Home
+              </button>
+
+              <button
+                onClick={() => scrollToSection("features")}
+                className="hover:text-slate-950"
+              >
+                Features
+              </button>
+
+              <button
+                onClick={() => scrollToSection("why-us")}
+                className="hover:text-slate-950"
+              >
+                Why us
+              </button>
+
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="hover:text-slate-950"
+              >
+                FAQ
+              </button>
+            </>
+          )}
         </nav>
 
         {/* Right side: CTA + mobile menu button */}
@@ -158,32 +165,37 @@ export const Navbar: React.FC<NavbarProps> = ({
           aria-hidden={!mobileOpen}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium text-slate-800">
-            <button
-              onClick={() => handleNavClick("hero")}
-              className="text-left hover:text-slate-950"
-            >
-              Home
-            </button>
-            
-            
-            <button
-              onClick={() => handleNavClick("features")}
-              className="text-left hover:text-slate-950"
-            >
-              Features
-            </button>
-            <button
-              onClick={() => handleNavClick("why-us")}
-              className="text-left hover:text-slate-950"
-            >
-              Why us
-            </button>
-            <button
-              onClick={() => handleNavClick("faq")}
-              className="text-left hover:text-slate-950"
-            >
-              FAQ
-            </button>
+            {showSections && (
+              <>
+                <button
+                  onClick={() => handleNavClick("hero")}
+                  className="text-left hover:text-slate-950"
+                >
+                  Home
+                </button>
+
+                <button
+                  onClick={() => handleNavClick("features")}
+                  className="text-left hover:text-slate-950"
+                >
+                  Features
+                </button>
+
+                <button
+                  onClick={() => handleNavClick("why-us")}
+                  className="text-left hover:text-slate-950"
+                >
+                  Why us
+                </button>
+
+                <button
+                  onClick={() => handleNavClick("faq")}
+                  className="text-left hover:text-slate-950"
+                >
+                  FAQ
+                </button>
+              </>
+            )}
 
             <div className="mt-2 border-t border-lime-100 pt-3">
               <button

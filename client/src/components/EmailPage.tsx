@@ -28,7 +28,7 @@ const EmailPage: React.FC = () => {
     const sample = {
       _id: id,
       subject: "Test Rohit",
-      from: "Rohit Choukiker <rohitchoukiker2803@gmail.com>",
+      from: "Rohit Choukiker rohit@stratsync.ai",
       body: "Test Rohit is going on",
       summary: "This is a test email from Rohit.",
       replyDraft: "Hi Rohit,\n\nTest received. Thanks!",
@@ -69,7 +69,9 @@ const EmailPage: React.FC = () => {
       <Navbar
         isAuthenticated={isAuthenticated}
         onGetStarted={() => navigate(isAuthenticated ? "/dashboard" : "/")}
+        
         scrollToSection={() => {}}
+        showSections={false}
       />
 
       <div className="mx-auto max-w-76xl px-4 py-8">
@@ -88,9 +90,7 @@ const EmailPage: React.FC = () => {
                   <h1 className="text-2xl font-semibold text-gray-900 truncate">{email.subject || "(No subject)"}</h1>
                   <p className="mt-1 text-sm text-gray-600"><strong>From:</strong> {email.from || "Unknown"}</p>
                 </div>
-                <button onClick={() => navigate("/dashboard")} className="rounded-full p-2 text-slate-500 hover:bg-slate-100">
-                  <X className="w-4 h-4" />
-                </button>
+               
               </div>
 
               {/* EMAIL BODY */}
