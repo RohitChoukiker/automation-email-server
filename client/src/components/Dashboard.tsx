@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Dashboard.css';
 
 import { CategoryFilter } from './CategoryFilter';
 import { EmailList } from './EmailList';
@@ -14,8 +15,8 @@ const Dashboard: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-[#E9F5FF] text-slate-900 transition-colors duration-300">
-      {/* Soft background blobs */}
+    <div className="min-h-screen bg-[#E9F5FF] text-slate-900 transition-colors duration-300 dashboard-no-scrollbar">
+
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-40 -right-24 h-80 w-80 rounded-full bg-[#E8FFC6] opacity-70 blur-3xl" />
         <div className="absolute -bottom-40 -left-24 h-80 w-80 rounded-full bg-[#D0F1FF] opacity-70 blur-3xl" />
@@ -29,23 +30,11 @@ const Dashboard: React.FC = () => {
       />
 
       {/* Main Content */}
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div
-          className="mb-8 animate-slide-up"
-          style={{ animationDelay: '0.15s' }}
-        >
-          <h2 className="mb-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            Your Inbox
-          </h2>
-          <p className="text-sm text-slate-600 sm:text-base">
-            Manage and categorize your incoming emails efficiently with
-            Inboxonic’s intelligent automation.
-          </p>
-        </div>
-
+      <main className="mx-auto max-w-full px-1 py-1 sm:px-1 lg:px-1">
+{/*     
+       
         {/* Main card */}
-        <div className="rounded-[32px] border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm sm:p-6 lg:p-7">
+        <div className="rounded-[8px] border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm sm:p-6 lg:p-7">
           {/* Category Filter */}
           <div
             className="mb-5 border-b border-slate-100 pb-4 animate-slide-up"
@@ -67,10 +56,10 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Small hint / footer text */}
-        <div className="mt-4 text-xs text-slate-500">
+        {/* <div className="mt-4 text-xs text-slate-500">
           Inboxonic reads and labels your emails using secure OAuth scopes – you
           stay in full control of your Gmail account.
-        </div>
+        </div> */}
       </main>
     </div>
   );

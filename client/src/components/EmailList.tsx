@@ -127,7 +127,7 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
               {/* optional: open full page (same /email/:id route) */}
               <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
                 <span className="text-xs text-gray-400">
-                  Hover / click different emails on the left to preview
+                
                 </span>
                 <button
                   onClick={() => navigate(`/email/${selectedEmail.id}`)}
@@ -140,11 +140,14 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
             </>
           ) : (
             <div className="h-full flex items-center justify-center text-gray-400 text-sm">
-              Hover or click on an email on the left to preview it here
             </div>
           )}
         </div>
+        
       </div>
+
+      
     </div>
+    
   );
 };
