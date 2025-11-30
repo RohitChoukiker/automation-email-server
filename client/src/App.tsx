@@ -48,10 +48,8 @@
 // }
 
 // export default App;
-
-
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-// import {EmailPage} from './components/EmailPage';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './components/LandingPage';
 import { AuthProvider } from './context/AuthProvider';
 import { ThemeProvider } from './context/ThemeContext';
@@ -62,7 +60,6 @@ import Privacy from './components/Privacy';
 import Terms from './components/Terms';
 import AuthCallback from './components/AuthCallback';
 
-// 👇 ye do imports add karna zaroori hai
 import { EmailList } from './components/EmailList';
 import type { EmailCategory } from './types';
 import { EmailDetail } from './components/EmailDetail';
@@ -75,13 +72,14 @@ const CATEGORIES: EmailCategory[] = [
   'UPDATES',
 ];
 
-// Optional: simple Emails layout with category tabs + list
-const EmailsLayout = () => {
+// Emails layout with category tabs + split inbox
+const EmailsLayout: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<EmailCategory>('ALL');
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        {/* Category tabs */}
         <div className="flex gap-2 mb-4 overflow-auto">
           {CATEGORIES.map((cat) => (
             <button
@@ -98,6 +96,7 @@ const EmailsLayout = () => {
           ))}
         </div>
 
+        {/* Split inbox (list + preview) */}
         <EmailList category={activeCategory} />
       </div>
     </div>
@@ -126,7 +125,7 @@ function App() {
               }
             />
 
-            {/* 👇 Protected email list page */}
+            {/* Protected email list page (split inbox) */}
             <Route
               path="/emails"
               element={
@@ -136,7 +135,7 @@ function App() {
               }
             />
 
-            {/* 👇 Protected email detail page (when user clicks on an email) */}
+            {/* Protected email detail page (full view) */}
             <Route
               path="/email/:id"
               element={

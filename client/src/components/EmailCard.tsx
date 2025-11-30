@@ -5,18 +5,28 @@ import type { Email } from '../types';
 interface EmailCardProps {
   email: Email;
   onClick: () => void;
+  onMouseEnter?: () => void;
   showCategory?: boolean;
+  isActive?: boolean;
 }
 
 export const EmailCard: React.FC<EmailCardProps> = ({
   email,
   onClick,
+  onMouseEnter,
   showCategory = false,
+  isActive = false,
 }) => {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow flex flex-col gap-1"
+      onMouseEnter={onMouseEnter}
+      className={`w-full text-left rounded-xl border p-4 transition-all flex flex-col gap-1
+        ${
+          isActive
+            ? 'bg-blue-50 border-blue-300 shadow-sm'
+            : 'bg-white border-gray-200 hover:bg-gray-50 hover:shadow-md'
+        }`}
     >
       <div className="flex justify-between items-center gap-3">
         <div className="font-semibold text-gray-900 truncate">
