@@ -1,36 +1,3 @@
-export interface Email {
-  id: string;
-  from: string;
-  subject: string;
-  snippet: string;
-  date: string;
-  category: EmailCategory;
-  isRead: boolean;
-}
-
-export type EmailCategory =
-  | 'ALL'
-  | 'LEAD'
-  | 'SALES'
-  | 'PARTNERSHIP'
-  | 'INVESTOR'
-  | 'SUPPORT'
-  | 'BUG_REPORT'
-  | 'FEATURE_REQUEST'
-  | 'BILLING'
-  | 'MEETING'
-  | 'FOLLOWUP'
-  | 'QUESTION'
-  | 'HIRING'
-  | 'NEWSLETTER'
-  | 'PERSONAL'
-  | 'SPAM'
-  | 'URGENT'
-  | 'ORDER'
-  | 'PAYMENT'
-  | 'AI_ANSWER'
-  | 'OTHER';
-
 export interface User {
   id: string;
   email: string;
@@ -42,4 +9,18 @@ export interface User {
   followupDays?: number;
   createdAt?: string;
   updatedAt?: string;
+}
+
+
+export type EmailCategory = 'ALL' | 'PRIMARY' | 'PROMOTIONS' | 'SOCIAL' | 'UPDATES';
+
+export interface Email {
+  id: string;
+  subject: string;
+  sender: string;
+  content: string;
+  category: EmailCategory;
+  date: string; // ISO string or simple date text
+  isRead?: boolean;
+  snippet?: string;
 }
