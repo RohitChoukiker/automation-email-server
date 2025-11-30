@@ -72,14 +72,13 @@ const CATEGORIES: EmailCategory[] = [
   'UPDATES',
 ];
 
-// Emails layout with category tabs + split inbox
 const EmailsLayout: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<EmailCategory>('ALL');
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-        {/* Category tabs */}
+       
         <div className="flex gap-2 mb-4 overflow-auto">
           {CATEGORIES.map((cat) => (
             <button
@@ -96,7 +95,7 @@ const EmailsLayout: React.FC = () => {
           ))}
         </div>
 
-        {/* Split inbox (list + preview) */}
+      
         <EmailList category={activeCategory} />
       </div>
     </div>
