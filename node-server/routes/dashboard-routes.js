@@ -10,6 +10,10 @@ const router = express.Router();
 router.get("/metrics", protect, async (req, res) => {
   try {
     const userId = req.user._id;
+    // Ensure we only construct a new ObjectId when `userId` is a string.
+    // Calling `mongoose.Types.ObjectId(...)` directly on an ObjectId instance
+    // can throw in newer runtimes: use `new` only for string ids.
+    const userObjectId = typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId;
     const days = Math.min(Number(req.query.days) || 7, 90);
     const end = new Date();
     end.setHours(23,59,59,999);
@@ -54,7 +58,7 @@ router.get("/metrics", protect, async (req, res) => {
     start.setHours(0,0,0,0);
 
     const volAgg = await EmailEvent.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(userId), eventType: "RECEIVED", createdAt: { $gte: start } } },
+      { $match: { userId: userObjectId, eventType: "RECEIVED", createdAt: { $gte: start } } },
       { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
       { $sort: { _id: 1 } }
     ]);
@@ -63,20 +67,20 @@ router.get("/metrics", protect, async (req, res) => {
     const volume = dates.map(d => ({ date: d, count: volMap[d] || 0 }));
 
     const catAgg = await EmailEvent.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(userId), eventType: "CATEGORY_ASSIGNED", createdAt: { $gte: start } } },
+      { $match: { userId: userObjectId, eventType: "CATEGORY_ASSIGNED", createdAt: { $gte: start } } },
       { $group: { _id: "$category", value: { $sum: 1 } } }
     ]);
     const categories = catAgg.map(x => ({ name: x._id || "Other", value: x.value }));
 
     const urgAgg = await EmailEvent.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(userId), priority: { $exists: true }, createdAt: { $gte: start } } },
+      { $match: { userId: userObjectId, priority: { $exists: true }, createdAt: { $gte: start } } },
       { $group: { _id: "$priority", value: { $sum: 1 } } }
     ]);
     const urgency = urgAgg.map(x => ({ label: x._id, value: x.value }));
 
 
     const totalReceived = volume.reduce((s,p) => s + p.count, 0);
-    const aiAgg = await EmailEvent.countDocuments({ userId: mongoose.Types.ObjectId(userId), eventType: "AUTO_REPLY_SUGGESTED", createdAt: { $gte: start } });
+    const aiAgg = await EmailEvent.countDocuments({ userId: userObjectId, eventType: "AUTO_REPLY_SUGGESTED", createdAt: { $gte: start } });
     const aiRepliesRatio = totalReceived ? aiAgg / totalReceived : 0;
     const inboxHealthScore = Math.round(80 + aiRepliesRatio * 20);
 

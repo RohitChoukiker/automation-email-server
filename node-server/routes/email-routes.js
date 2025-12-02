@@ -145,10 +145,10 @@ router.post("/analyze", protect, async (req, res) => {
       gmailThreadId,
     } = req.body;
 
-    // const finalBody = body || snippet;
-    // if (!subject || !finalBody) {
-    //   return res.status(400).json({ message: "Subject & body/snippet are required." });
-    // }
+    const finalBody = body || snippet;
+    if (!subject || !finalBody) {
+      return res.status(400).json({ message: "Subject & body/snippet are required." });
+    }
 
     // Respect user's automation setting
     if (req.user && req.user.automationEnabled === false) {

@@ -31,9 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/* ---------------------------------------------------------
-   ⏱ Automated Email Fetch + Analyze (your existing job)
----------------------------------------------------------- */
+
 cron.schedule("* * * * *", async () => {
   logger.info("Running scheduled email automation...");
   try {
@@ -53,9 +51,6 @@ setTimeout(async () => {
   }
 }, 3000);
 
-/* ---------------------------------------------------------
-   ⭐ NEW: DAILY METRICS AGGREGATION JOB (Dashboard Graphs)
----------------------------------------------------------- */
 
 // Runs everyday at 00:10 AM UTC
 cron.schedule("10 0 * * *", async () => {
@@ -84,9 +79,7 @@ setTimeout(async () => {
 */
 
 
-/* ---------------------------------------------------------
-   ROUTES
----------------------------------------------------------- */
+
 app.get("/", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
@@ -96,10 +89,6 @@ app.use("/api/emails", emailRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/dashboard", dashboardRouter);
 
-// ⚠️ Don't forget to mount dashboard route (if created)
-// Example:
-// import dashboardRouter from "./routes/dashboard.js";
-// app.use("/api/dashboard", dashboardRouter);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
