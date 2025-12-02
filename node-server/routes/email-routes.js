@@ -19,13 +19,11 @@ router.get("/filter-emails", protect, async (req, res) => {
     let query = { userId: req.user._id };
 
     // Filter by intent/category if provided
-    if (category && category !== 'ALL') {
+    if (category && category !== "ALL") {
       query.intent = category;
     }
 
-    const emails = await Email.find(query)
-      .sort({ createdAt: -1 })
-      .limit(50);
+    const emails = await Email.find(query).sort({ createdAt: -1 }).limit(50);
 
     res.json({ emails });
   } catch (err) {
@@ -42,7 +40,9 @@ function getOAuth2ClientForUser(user) {
   // Decrypt the refresh token before using it
   const decryptedRefreshToken = decryptToken(user.googleRefreshToken);
   if (!decryptedRefreshToken) {
-    throw new Error("Failed to decrypt refresh token. Please reconnect Google.");
+    throw new Error(
+      "Failed to decrypt refresh token. Please reconnect Google."
+    );
   }
 
   const client = new google.auth.OAuth2(
@@ -58,14 +58,13 @@ function getOAuth2ClientForUser(user) {
   return client;
 }
 
-
 function createRawMessage({ from, to, subject, text }) {
   const lines = [
     `From: ${from}`,
     `To: ${to}`,
     `Subject: ${subject}`,
     'Content-Type: text/plain; charset="UTF-8"',
-    '',
+    "",
     text,
   ];
 
@@ -81,9 +80,10 @@ function createRawMessage({ from, to, subject, text }) {
  */
 router.get("/fetch", protect, async (req, res) => {
   try {
- 
     if (req.user && req.user.automationEnabled === false) {
-      return res.status(403).json({ message: "Automation is disabled for this user." });
+      return res
+        .status(403)
+        .json({ message: "Automation is disabled for this user." });
     }
 
     const auth = getOAuth2ClientForUser(req.user);
@@ -107,7 +107,8 @@ router.get("/fetch", protect, async (req, res) => {
 
         const headers = msg.data.payload?.headers || [];
         const getHeader = (name) =>
-          headers.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value || "";
+          headers.find((h) => h.name.toLowerCase() === name.toLowerCase())
+            ?.value || "";
 
         return {
           gmailMessageId: m.id,
@@ -144,14 +145,16 @@ router.post("/analyze", protect, async (req, res) => {
       gmailThreadId,
     } = req.body;
 
-    const finalBody = body || snippet;
-    if (!subject || !finalBody) {
-      return res.status(400).json({ message: "Subject & body/snippet are required." });
-    }
+    // const finalBody = body || snippet;
+    // if (!subject || !finalBody) {
+    //   return res.status(400).json({ message: "Subject & body/snippet are required." });
+    // }
 
     // Respect user's automation setting
     if (req.user && req.user.automationEnabled === false) {
-      return res.status(403).json({ message: "Automation is disabled for this user." });
+      return res
+        .status(403)
+        .json({ message: "Automation is disabled for this user." });
     }
     const ai = await analyzeEmailAI({
       subject,
@@ -174,6 +177,23 @@ router.post("/analyze", protect, async (req, res) => {
       status: "PENDING",
     });
 
+    await addEvent({
+      userId: req.user._id,
+      emailId: email._id.toString(),
+      eventType: "RECEIVED",
+      category: ai.intent || null,
+      priority: ai.priority || "NORMAL",
+      meta: { gmailMessageId, gmailThreadId, snippet },
+    });
+
+    if (ai.reply) {
+      await addEvent({
+        userId: req.user._id,
+        emailId: email._id.toString(),
+        eventType: "AUTO_REPLY_SUGGESTED",
+        meta: { reply: ai.reply },
+      });
+    }
     res.json(email);
   } catch (err) {
     console.error("⚠ Analyze email error:");
@@ -201,7 +221,8 @@ router.post("/send/:id", protect, async (req, res) => {
     // Allow client to provide reply text in the POST body (preferred),
     // otherwise fall back to stored replyDraft on the Email document.
     const { text: providedText } = req.body || {};
-    const replyText = providedText || email.replyDraft || "Thanks for your message.";
+    const replyText =
+      providedText || email.replyDraft || "Thanks for your message.";
 
     const raw = createRawMessage({
       from: req.user.email,
@@ -222,6 +243,13 @@ router.post("/send/:id", protect, async (req, res) => {
     email.status = "REPLIED";
     email.replyDraft = replyText;
     await email.save();
+
+    await addEvent({
+      userId: req.user._id,
+      emailId: email._id.toString(),
+      eventType: "REPLIED",
+      meta: { usedReply: replyText, sendResId: sendRes.data?.id || null },
+    });
 
     res.json({ message: "Reply sent successfully!", sendRes, email });
   } catch (err) {
@@ -250,6 +278,5 @@ router.get("/:id", protect, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 export default router;

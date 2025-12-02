@@ -171,7 +171,7 @@ def analyze_email(subject: str, body: str, tone: str = "friendly", language: str
     data = _safe_extract_json(raw)
 
     summary = (data.get("summary") or "").strip()
-    intent = (data.get("intent") or "OTHER").strip().upper()
+    intent = (data.get("intent") )
     reply = (data.get("reply") or "").strip()
 
     if intent not in ALLOWED_INTENTS:
