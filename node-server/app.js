@@ -14,6 +14,7 @@ import globalErrorHandler from "./services/errorService.js";
 import authRoutes from "./routes/auth-routes.js";
 import emailRoutes from "./routes/email-routes.js";
 import userRoutes from "./routes/user-routes.js";
+import dashboardRouter from "./routes/dashboard-routes.js";
 
 
 import { runDailyAggregationForDate } from "./jobs/dailyMetricsJob.js";
@@ -93,6 +94,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/emails", emailRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/dashboard", dashboardRouter);
 
 // ⚠️ Don't forget to mount dashboard route (if created)
 // Example:
