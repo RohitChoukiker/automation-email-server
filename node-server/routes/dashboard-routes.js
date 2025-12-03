@@ -22,7 +22,7 @@ router.get("/metrics", protect, async (req, res) => {
       dates.push(d.toISOString().slice(0,10));
     }
 
-    const dailyDocs = await DailyMetrics.find({ userId, date: { $in: dates } }).lean();
+    const dailyDocs = await DailyMetrics.find({ userId: userObjectId, date: { $in: dates } }).lean();
 
     if (dailyDocs.length) {
       const volume = dates.map(d => {

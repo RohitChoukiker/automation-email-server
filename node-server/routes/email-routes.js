@@ -223,12 +223,10 @@ router.post("/analyze", protect, async (req, res) => {
       return res.status(400).json({ message: "Subject & body/snippet are required." });
     }
 
-    // Respect user's automation setting
     if (req.user && req.user.automationEnabled === false) {
-      return res
-        .status(403)
-        .json({ message: "Automation is disabled for this user." });
+      return res.status(403).json({ message: "Automation is disabled for this user." });
     }
+
     const ai = await analyzeEmailAI({
       subject,
       body: finalBody,
@@ -250,6 +248,7 @@ router.post("/analyze", protect, async (req, res) => {
       status: "PENDING",
     });
 
+    // 1️⃣ RECEIVED event
     await addEvent({
       userId: req.user._id,
       emailId: email._id.toString(),
@@ -259,6 +258,16 @@ router.post("/analyze", protect, async (req, res) => {
       meta: { gmailMessageId, gmailThreadId, snippet },
     });
 
+    // 2️⃣ CATEGORY_ASSIGNED event — REQUIRED FOR DASHBOARD CATEGORY GRAPH
+    await addEvent({
+      userId: req.user._id,
+      emailId: email._id.toString(),
+      eventType: "CATEGORY_ASSIGNED",
+      category: ai.intent,
+      meta: { gmailMessageId, gmailThreadId }
+    });
+
+    // 3️⃣ AUTO_REPLY_SUGGESTED event
     if (ai.reply) {
       await addEvent({
         userId: req.user._id,
@@ -267,9 +276,10 @@ router.post("/analyze", protect, async (req, res) => {
         meta: { reply: ai.reply },
       });
     }
+
     res.json(email);
   } catch (err) {
-    console.error("⚠ Analyze email error:");
+    console.error("⚠ Analyze email error:", err);
     res.status(500).json({ message: "Failed to analyze email" });
   }
 });
