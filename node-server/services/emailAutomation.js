@@ -4,6 +4,8 @@ import Email from "../models/email-model.js";
 import { decryptToken } from "../models/user-model.js";
 import { analyzeEmailAI } from "./aiService.js";
 import logger from "../utils/logger.js";
+import { addEvent } from "../utils/events.js";
+import { runDailyAggregationForDate } from "../jobs/dailyMetricsJob.js";
 
 /**
  * Get OAuth2 client for a user
@@ -174,7 +176,7 @@ async function processUserEmails(user) {
         }
 
         // Save email to database
-        await Email.create({
+        const newEmail = await Email.create({
           userId: user._id,
           gmailMessageId: messageRef.id,
           gmailThreadId: msg.threadId,
@@ -187,6 +189,39 @@ async function processUserEmails(user) {
           replyDraft: aiResult.reply,
           status: "PENDING",
         });
+
+        // Create EmailEvent entries so dashboard aggregates can use them
+        try {
+          await addEvent({
+            userId: user._id,
+            emailId: newEmail._id.toString(),
+            eventType: "RECEIVED",
+            category: aiResult.intent || null,
+            priority: aiResult.priority || "NORMAL",
+            meta: { gmailMessageId: messageRef.id, gmailThreadId: msg.threadId, snippet },
+          });
+
+          // CATEGORY_ASSIGNED event (used by daily aggregation)
+          await addEvent({
+            userId: user._id,
+            emailId: newEmail._id.toString(),
+            eventType: "CATEGORY_ASSIGNED",
+            category: aiResult.intent,
+            meta: { gmailMessageId: messageRef.id, gmailThreadId: msg.threadId },
+          });
+
+          // AUTO_REPLY_SUGGESTED if available
+          if (aiResult.reply) {
+            await addEvent({
+              userId: user._id,
+              emailId: newEmail._id.toString(),
+              eventType: "AUTO_REPLY_SUGGESTED",
+              meta: { reply: aiResult.reply },
+            });
+          }
+        } catch (evErr) {
+          logger.error(`Failed to create EmailEvent for user ${user.email}:`, evErr);
+        }
 
         processed++;
         logger.info(`Processed email: ${subject} for user ${user.email}`);
@@ -241,6 +276,14 @@ export async function runEmailAutomation() {
     logger.info(
       `Automation completed: ${totalProcessed} emails processed, ${totalSkipped} skipped`
     );
+    // Trigger daily aggregation for today so dashboard reflects new events quickly
+    try {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      await runDailyAggregationForDate(todayStr);
+      logger.info(`Triggered daily aggregation for ${todayStr}`);
+    } catch (aggErr) {
+      logger.error("Failed to run daily aggregation after automation:", aggErr);
+    }
   } catch (error) {
     logger.error("Error in email automation:", error);
   }

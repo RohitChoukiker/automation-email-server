@@ -13,13 +13,15 @@ router.get("/metrics", protect, async (req, res) => {
    
     const userObjectId = typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId;
     const days = Math.min(Number(req.query.days) || 7, 90);
-    const end = new Date();
-    end.setHours(23,59,59,999);
+    // Use UTC-based boundaries so the generated YYYY-MM-DD strings
+    // match how daily aggregates are stored (they use UTC dates).
+    const now = new Date();
+    const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
     const dates = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(end);
-      d.setDate(end.getDate() - i);
-      dates.push(d.toISOString().slice(0,10));
+      d.setUTCDate(end.getUTCDate() - i);
+      dates.push(d.toISOString().slice(0, 10));
     }
 
     const dailyDocs = await DailyMetrics.find({ userId: userObjectId, date: { $in: dates } }).lean();
@@ -51,9 +53,9 @@ router.get("/metrics", protect, async (req, res) => {
     }
 
    
-    const start = new Date();
-    start.setDate(end.getDate() - (days - 1));
-    start.setHours(0,0,0,0);
+    const start = new Date(end);
+    start.setUTCDate(end.getUTCDate() - (days - 1));
+    start.setUTCHours(0, 0, 0, 0);
 
     const volAgg = await EmailEvent.aggregate([
       { $match: { userId: userObjectId, eventType: "RECEIVED", createdAt: { $gte: start } } },

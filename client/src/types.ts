@@ -19,6 +19,7 @@ export interface Email {
   subject: string;
   sender: string;
   content: string;
+  aiSummary?: string;
   category: EmailCategory;
   date: string; // ISO string or simple date text
   isRead?: boolean;

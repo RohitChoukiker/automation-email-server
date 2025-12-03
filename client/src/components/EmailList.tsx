@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Email, EmailCategory } from '../types';
+import { fetchEmails, sendEmail } from '../api';
 import { EmailCard } from './EmailCard';
 import { Loader2, Inbox, ExternalLink } from 'lucide-react';
-import { SAMPLE_EMAILS } from '../data/sampleEmails';
 
 interface EmailListProps {
   category: EmailCategory;
@@ -15,25 +15,75 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [sending, setSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Load + filter emails by category
+  // Load + filter emails by category (from backend)
   useEffect(() => {
-    setLoading(true);
-    setError(null);
+    let mounted = true;
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // `category` can be 'ALL' or specific like 'URGENT'
+        const backendEmails = await fetchEmails(category as any);
+
+        if (!mounted) return;
+
+        // Map backend email shape to frontend `Email` type
+        const mapped: Email[] = backendEmails.map((e: any) => ({
+          id: e._id || e.id || String(Math.random()),
+          subject: e.subject || '(no subject)',
+          sender: e.from || e.sender || 'Unknown',
+          // prefer raw body/snippet for the main content; keep AI summary separate
+          content: e.body || e.snippet || e.summary || '',
+          // map any AI-generated summary fields into `aiSummary` when present
+          aiSummary: e.aiSummary || e.generatedSummary || e.summary || e.summaryText || undefined,
+          // try to map backend intent/category to our EmailCategory when possible
+          category: (e.intent as EmailCategory) || (category as EmailCategory) || 'ALL',
+          date: e.createdAt ? new Date(e.createdAt).toLocaleString() : (e.date || ''),
+          isRead: e.isRead || false,
+          snippet: e.snippet || undefined,
+        }));
+
+        setEmails(mapped);
+      } catch (err) {
+        console.error('EmailList fetch error:', err);
+        setError('Failed to load emails from server.');
+        setEmails([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
+  }, [category]);
+
+  const handleSend = async () => {
+    if (!selectedEmail) return;
+    setSending(true);
+    setSendStatus(null);
 
     try {
-      let filtered = SAMPLE_EMAILS;
-      if (category !== 'ALL') {
-        filtered = SAMPLE_EMAILS.filter((email) => email.category === category);
-      }
-      setEmails(filtered);
+      // prefer AI summary as the reply text if available
+      const text = selectedEmail.aiSummary || selectedEmail.content || '';
+      await sendEmail(selectedEmail.id, text);
+      setSendStatus('Sent');
     } catch (err) {
-      setError('Failed to load emails.');
+      console.error('Send error:', err);
+      setSendStatus('Failed to send');
     } finally {
-      setLoading(false);
+      setSending(false);
+      // clear status after a short delay
+      setTimeout(() => setSendStatus(null), 3000);
     }
-  }, [category]);
+  };
 
   // LEVEL 3: auto-select first email OR keep previous if still visible
   useEffect(() => {
@@ -50,7 +100,8 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
     });
   }, [emails]);
 
-  if (loading) {
+  // Show a full-page loader only when we have no emails yet.
+  if (loading && emails.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -99,7 +150,11 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
       {/* RIGHT: Preview panel */}
       <div className="md:w-1/2 lg:w-3/5">
         <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm h-[70vh] flex flex-col">
-          {selectedEmail ? (
+          {loading ? (
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            </div>
+          ) : selectedEmail ? (
             <>
               <div className="mb-3">
                 <h2 className="text-lg font-semibold text-gray-900">
@@ -114,6 +169,15 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
                   <span>•</span>
                   <span>{selectedEmail.category}</span>
                 </div>
+                {/* AI summary (if available) */}
+                {selectedEmail.aiSummary && (
+                  <div className="mt-3 p-3 bg-gray-50 border border-gray-100 rounded">
+                    <h3 className="text-sm font-medium text-gray-700">AI Summary</h3>
+                    <p className="mt-1 text-sm text-gray-600 whitespace-pre-wrap">
+                      {selectedEmail.aiSummary}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <hr className="my-3" />
@@ -126,9 +190,26 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
 
               {/* optional: open full page (same /email/:id route) */}
               <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
-                <span className="text-xs text-gray-400">
-                
-                </span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleSend}
+                    disabled={sending}
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded ${sending ? 'bg-blue-300 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                  >
+                    {sending ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      'Send'
+                    )}
+                  </button>
+
+                  {sendStatus && (
+                    <span className={`text-sm ${sendStatus === 'Sent' ? 'text-green-600' : 'text-red-600'}`}>
+                      {sendStatus}
+                    </span>
+                  )}
+                </div>
+
                 <button
                   onClick={() => navigate(`/email/${selectedEmail.id}`)}
                   className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline"
