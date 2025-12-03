@@ -116,7 +116,7 @@ export const DashboardCharts: React.FC = () => {
         const headers: Record<string, string> = { Accept: "application/json" };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const res = await fetch("/api/dashboard/metrics", {
+        const res = await fetch("https://automation-email-node-services-861179148736.europe-west1.run.app/api/dashboard/metrics", {
           method: "GET",
           credentials: "include",
           headers,
