@@ -17,6 +17,7 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [sending, setSending] = useState(false);
   const [sendStatus, setSendStatus] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState<string>("");
   const navigate = useNavigate();
 
   // Load + filter emails by category (from backend)
@@ -41,6 +42,8 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
           content: e.body || e.snippet || e.summary || '',
           // map any AI-generated summary fields into `aiSummary` when present
           aiSummary: e.aiSummary || e.generatedSummary || e.summary || e.summaryText || undefined,
+          // backend may provide a generated reply draft (replyDraft)
+          replyDraft: e.replyDraft || e.reply_draft || e.aiReply || undefined,
           // try to map backend intent/category to our EmailCategory when possible
           category: (e.intent as EmailCategory) || (category as EmailCategory) || 'ALL',
           date: e.createdAt ? new Date(e.createdAt).toLocaleString() : (e.date || ''),
@@ -71,10 +74,11 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
     setSendStatus(null);
 
     try {
-      // prefer AI summary as the reply text if available
-      const text = selectedEmail.aiSummary || selectedEmail.content || '';
+      const text = replyText || selectedEmail.aiSummary || selectedEmail.content || '';
       await sendEmail(selectedEmail.id, text);
       setSendStatus('Sent');
+      // clear draft after sending
+      setReplyText('');
     } catch (err) {
       console.error('Send error:', err);
       setSendStatus('Failed to send');
@@ -99,6 +103,16 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
       return emails[0]; // warna pehla auto select
     });
   }, [emails]);
+
+  // Prefill reply draft when selected email changes
+  useEffect(() => {
+    if (!selectedEmail) {
+      setReplyText('');
+      return;
+    }
+    // Prefer backend-provided replyDraft, then AI summary, then body/content
+    setReplyText(selectedEmail.replyDraft ?? selectedEmail.aiSummary ?? selectedEmail.content ?? '');
+  }, [selectedEmail]);
 
   // Show a full-page loader only when we have no emails yet.
   if (loading && emails.length === 0) {
@@ -188,35 +202,52 @@ export const EmailList: React.FC<EmailListProps> = ({ category }) => {
                 </p>
               </div>
 
-              {/* optional: open full page (same /email/:id route) */}
-              <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={handleSend}
-                    disabled={sending}
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded ${sending ? 'bg-blue-300 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
-                  >
-                    {sending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      'Send'
+              {/* Reply draft + controls */}
+              <div className="mt-4 pt-3 border-t border-gray-100">
+                <label className="text-xs text-gray-500 mb-2 block">Draft reply</label>
+                <textarea
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  rows={4}
+                  placeholder="Write your reply here (edit AI suggestion or compose your own)..."
+                  className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleSend}
+                      disabled={sending || !replyText.trim()}
+                      className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded ${sending ? 'bg-green-300 text-white cursor-not-allowed' : !replyText.trim() ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                    >
+                      {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
+                    </button>
+
+                    {sendStatus && (
+                      <span className={`text-sm ${sendStatus === 'Sent' ? 'text-green-600' : 'text-red-600'}`}>
+                        {sendStatus}
+                      </span>
                     )}
-                  </button>
 
-                  {sendStatus && (
-                    <span className={`text-sm ${sendStatus === 'Sent' ? 'text-green-600' : 'text-red-600'}`}>
-                      {sendStatus}
-                    </span>
-                  )}
+                    <button
+                      onClick={() => setReplyText(selectedEmail ? (selectedEmail.aiSummary ?? selectedEmail.content ?? '') : '')}
+                      className="text-sm text-gray-500 hover:underline"
+                    >
+                      Reset
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="text-xs text-gray-500">{replyText.length} chars</div>
+                    <button
+                      onClick={() => navigate(`/email/${selectedEmail.id}`)}
+                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Open full view
+                    </button>
+                  </div>
                 </div>
-
-                <button
-                  onClick={() => navigate(`/email/${selectedEmail.id}`)}
-                  className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Open full view
-                </button>
               </div>
             </>
           ) : (

@@ -20,6 +20,7 @@ export interface Email {
   sender: string;
   content: string;
   aiSummary?: string;
+  replyDraft?: string;
   category: EmailCategory;
   date: string; // ISO string or simple date text
   isRead?: boolean;
