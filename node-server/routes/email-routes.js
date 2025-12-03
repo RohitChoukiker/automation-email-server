@@ -19,7 +19,7 @@ router.get("/filter-emails", protect, async (req, res) => {
 
     let query = { userId: req.user._id };
 
-    // Filter by intent/category if provided
+  
     if (category && category !== "ALL") {
       query.intent = category;
     }
