@@ -6,6 +6,7 @@ import { protect } from "../middleware/authMiddleware.js";
 import { analyzeEmailAI } from "../services/aiService.js";
 import { decryptToken } from "../models/user-model.js";
 import { runEmailAutomation } from "../services/emailAutomation.js";
+import { addEvent } from "../utils/events.js";
 
 const router = express.Router();
 
@@ -89,41 +90,113 @@ router.get("/fetch", protect, async (req, res) => {
     const auth = getOAuth2ClientForUser(req.user);
     const gmail = google.gmail({ version: "v1", auth });
 
+    // 1. Fetch latest 20 emails
     const listRes = await gmail.users.messages.list({
       userId: "me",
       labelIds: ["INBOX"],
-      maxResults: 15,
+      maxResults: 20,
     });
 
     const messages = listRes.data.messages || [];
-    const emails = await Promise.all(
-      messages.map(async (m) => {
-        const msg = await gmail.users.messages.get({
-          userId: "me",
-          id: m.id,
-          format: "metadata",
-          metadataHeaders: ["Subject", "From", "Date"],
+    const results = [];
+
+    // 2. Process each message
+    for (const m of messages) {
+      // Check if already exists
+      const existing = await Email.findOne({
+        userId: req.user._id,
+        gmailMessageId: m.id,
+      });
+
+      if (existing) {
+        // Already analyzed, just push to results
+        results.push(existing);
+        continue;
+      }
+
+      // Fetch full details
+      const msg = await gmail.users.messages.get({
+        userId: "me",
+        id: m.id,
+        format: "full", // Need full for body
+      });
+
+      const headers = msg.data.payload?.headers || [];
+      const getHeader = (name) =>
+        headers.find((h) => h.name.toLowerCase() === name.toLowerCase())
+          ?.value || "";
+
+      const subject = getHeader("Subject");
+      const from = getHeader("From");
+      const to = getHeader("To"); // Add To field
+      const snippet = msg.data.snippet || "";
+
+      // Extract body (simplified logic)
+      let body = snippet;
+      if (msg.data.payload?.body?.data) {
+        body = Buffer.from(msg.data.payload.body.data, "base64").toString(
+          "utf-8"
+        );
+      } else if (msg.data.payload?.parts) {
+        const part = msg.data.payload.parts.find(
+          (p) => p.mimeType === "text/plain"
+        );
+        if (part?.body?.data) {
+          body = Buffer.from(part.body.data, "base64").toString("utf-8");
+        }
+      }
+
+      // 3. Analyze with AI
+      try {
+        const ai = await analyzeEmailAI({
+          subject,
+          body,
         });
 
-        const headers = msg.data.payload?.headers || [];
-        const getHeader = (name) =>
-          headers.find((h) => h.name.toLowerCase() === name.toLowerCase())
-            ?.value || "";
-
-        return {
+        // 4. Save to DB
+        const newEmail = await Email.create({
+          userId: req.user._id,
+          from,
+          to,
+          subject,
+          body, // Store full body or snippet
           gmailMessageId: m.id,
           gmailThreadId: msg.data.threadId,
-          subject: getHeader("Subject"),
-          from: getHeader("From"),
-          date: getHeader("Date"),
-          snippet: msg.data.snippet || "",
-        };
-      })
-    );
+          summary: ai.summary,
+          intent: ai.intent,
+          replyDraft: ai.reply,
+          status: "PENDING",
+        });
 
-    res.json({ emails });
+        // Add event
+        await addEvent({
+          userId: req.user._id,
+          emailId: newEmail._id.toString(),
+          eventType: "RECEIVED",
+          category: ai.intent || null,
+          priority: ai.priority || "NORMAL",
+          meta: { gmailMessageId: m.id, gmailThreadId: msg.data.threadId, snippet },
+        });
+
+        if (ai.reply) {
+          await addEvent({
+            userId: req.user._id,
+            emailId: newEmail._id.toString(),
+            eventType: "AUTO_REPLY_SUGGESTED",
+            meta: { reply: ai.reply },
+          });
+        }
+
+        results.push(newEmail);
+      } catch (aiErr) {
+        console.error(`Failed to analyze email ${m.id}:`, aiErr);
+        // Optionally save without analysis or skip
+      }
+    }
+
+    res.json({ emails: results });
   } catch (err) {
-    console.log("⚠ Gmail fetch error:");
+    console.error("⚠ Gmail fetch error:", err);
     res.status(500).json({ message: "Failed to fetch Gmail emails" });
   }
 });
