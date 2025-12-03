@@ -64,8 +64,9 @@ router.get("/metrics", protect, async (req, res) => {
     volAgg.forEach(r => volMap[r._id] = r.count);
     const volume = dates.map(d => ({ date: d, count: volMap[d] || 0 }));
 
+    // Include any event that has a category (e.g. RECEIVED with ai.intent)
     const catAgg = await EmailEvent.aggregate([
-      { $match: { userId: userObjectId, eventType: "CATEGORY_ASSIGNED", createdAt: { $gte: start } } },
+      { $match: { userId: userObjectId, category: { $exists: true, $ne: null }, createdAt: { $gte: start } } },
       { $group: { _id: "$category", value: { $sum: 1 } } }
     ]);
     const categories = catAgg.map(x => ({ name: x._id || "Other", value: x.value }));
