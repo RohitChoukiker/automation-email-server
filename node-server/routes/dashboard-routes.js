@@ -10,9 +10,7 @@ const router = express.Router();
 router.get("/metrics", protect, async (req, res) => {
   try {
     const userId = req.user._id;
-    // Ensure we only construct a new ObjectId when `userId` is a string.
-    // Calling `mongoose.Types.ObjectId(...)` directly on an ObjectId instance
-    // can throw in newer runtimes: use `new` only for string ids.
+   
     const userObjectId = typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId;
     const days = Math.min(Number(req.query.days) || 7, 90);
     const end = new Date();
