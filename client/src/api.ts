@@ -1,7 +1,7 @@
 import type { Email, EmailCategory, User } from './types';
 
 
-export const BACKEND_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'; // Production URL
+export const BACKEND_BASE_URL =  'https://automation-email-node-services-861179148736.europe-west1.run.app'; // Production URL
 
 
 

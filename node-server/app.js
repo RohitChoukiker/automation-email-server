@@ -60,7 +60,7 @@ cron.schedule("10 0 * * *", async () => {
 
     const dateStr = yesterday.toISOString().slice(0, 10); // YYYY-MM-DD
 
-    logger.info(`📊 Running daily metrics aggregation for ${dateStr}...`);
+    logger.info(`Running daily metrics aggregation for ${dateStr}...`);
 
     await runDailyAggregationForDate(dateStr);
 

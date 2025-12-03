@@ -19,6 +19,7 @@ router.get("/google", (req, res) => {
 
     // Redirect directly to Google OAuth
     res.redirect(url);
+    console.log("Redirecting to Google OAuth URL:", url);
   } catch (err) {
     console.error("Google auth URL error:", err.message);
     res.status(500).json({ message: "Failed to generate auth URL" });
