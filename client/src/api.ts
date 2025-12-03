@@ -1,7 +1,7 @@
 import type { Email, EmailCategory, User } from './types';
 
 
-export const BACKEND_BASE_URL = 'http://localhost:5000'; // Development URL
+export const BACKEND_BASE_URL = 'https://automation-email-node-services-861179148736.europe-west1.run.app'; // Production URL
 
 
 
