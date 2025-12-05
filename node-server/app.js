@@ -73,7 +73,7 @@ cron.schedule("10 0 * * *", async () => {
 /* -- OPTIONAL: Run once at startup for testing --
 setTimeout(async () => {
   const dateStr = new Date().toISOString().slice(0,10);
-  logger.info(`📊 Running test aggregation for today (${dateStr})`);
+  logger.info(`Running test aggregation for today (${dateStr})`);
   await runDailyAggregationForDate(dateStr);
 }, 5000);
 */
