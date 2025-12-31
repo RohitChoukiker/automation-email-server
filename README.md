@@ -1,4 +1,4 @@
-# 📧 Inboxonic – AI-Powered Email Automation System  
+#  Inboxonic – AI-Powered Email Automation System  
 ### *(AI-Driven Email Intelligence System — Email Automation + NLP Classification + Dashboard Analytics)*
 
 Inboxonic is a **production-ready, full-stack AI email automation system** that integrates deeply with Gmail, auto-classifies incoming emails using a **custom Gemini LLM pipeline**, generates smart replies, and visualizes inbox analytics on a real-time dashboard.
